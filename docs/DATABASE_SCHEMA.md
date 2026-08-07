@@ -1,0 +1,304 @@
+# Database Schema
+
+Business requirements, domain logic, and Prisma data model for **Happy Moments
+Food Corporation** (Mang Felipe) catering order app.
+
+Source of truth for tables: `prisma/schema/`. Product scope: `docs/PROJECT_DOCS.md`.
+Stack rules: `docs/TECHNOLOGY_STACK.md`.
+
+## Business summary
+
+| Who | What |
+| --- | --- |
+| Customer (guest) | Browse menu, pick size/qty, checkout with delivery details, pay offline, upload payment screenshot. Receives order email. No login. |
+| Admin | Login via Better Auth. CRUD menu. Review orders and payment proofs. Confirm / reject / edit. |
+
+**Not in scope for the schema:** inventory/stock, online payment gateway (FIUU later), customer accounts, delivery-fee calculation.
+
+---
+
+## Domain rules
+
+### Menu
+
+1. Food is organized by **category** (Pansit, Lumpia, Packed Meals, …).
+2. Each **menu item** belongs to one category.
+3. Prices are not single values. Each item has one or more **variants**
+   (size / portion / price rows). Examples: Family, Fiesta, Super, Per meal.
+4. Variant portion text is free-form per item (`Up to 8 pax`, `20 rolls`,
+   `2.5 Kilos`). Do not assume one portion definition for every category.
+5. Not every item has every size. Example: Lechon Pork Belly has Fiesta + Super
+   only (no Family).
+6. Soft hide via `isActive` on category, item, and variant. Prefer deactivate
+   over hard delete when orders already reference the item.
+7. Optional item `code` for bilao packs (B1–B4).
+8. Optional item `notes` for UI warnings (e.g. Lechon two-day advance).
+9. Optional `imageKey` stores an R2 object key, not a public CDN URL.
+10. **No inventory fields.** Availability is admin-controlled (`isActive`), not stock qty.
+11. Packed Meals is a normal orderable category. Seed starts at ₱120 per meal;
+    contact phone for special menu stays in app constants / category description.
+
+### Ordering
+
+1. Customers do **not** have user accounts. Order rows own all customer fields.
+2. Checkout must collect: name, email, phone, delivery address, event/delivery
+   date, optional delivery notes.
+3. `eventDate` must be at least **2 calendar days** from order time
+   (`ORDER_MIN_LEAD_DAYS` in `constants/payment.ts`). Enforce in app validation.
+4. Customer picks a **payment channel**: UnionBank, GCash, or BPI. Account
+   details shown in UI come from `constants/payment.ts` (not stored per order
+   beyond the channel enum).
+5. Customer uploads a **payment screenshot** to R2. Order stores
+   `paymentProofKey` + `paymentProofUploadedAt`.
+6. New orders start as `pending_review`.
+7. Admin may set `confirmed`, `rejected`, or `cancelled`, with optional
+   `adminNotes`, `reviewedAt`, `reviewedByUserId`.
+8. **Delivery fee is never stored or computed.** `subtotalPhp` is food line
+   totals only. UI must state delivery fee is not included.
+9. After submit, send order-details email to `customerEmail` (app concern;
+   schema only stores the address).
+
+### Money and line items
+
+1. All money fields are **whole PHP pesos** (`Int`). No floats.
+2. On order create, copy variant display fields onto each `OrderItem`
+   (`itemName`, `variantLabel`, `portionLabel`, `unitPricePhp`). Later menu
+   price edits must **not** rewrite historical orders.
+3. `lineTotalPhp = unitPricePhp * quantity` (validated server-side).
+4. `Order.subtotalPhp = sum(OrderItem.lineTotalPhp)`.
+5. Keep nullable FKs to `MenuItem` / `MenuItemVariant` for admin navigation.
+   Use `ON DELETE SET NULL` so deleting a menu row does not wipe order history;
+   snapshots remain.
+
+### Auth
+
+1. Better Auth tables (`user`, `session`, `account`, `verification`) are for
+   **admins only**.
+2. Admin authorization uses `user.roles` (app-level), checked on protected
+   mutations — not only UI hiding.
+
+---
+
+## Schema file layout
+
+```text
+prisma/schema/
+  base.prisma   # generator + datasource
+  auth.prisma   # User, Session, Account, Verification
+  menu.prisma   # Category, MenuItem, MenuItemVariant
+  order.prisma  # Order, OrderItem, OrderStatus, PaymentChannel
+```
+
+`prisma.config.ts` points `schema` at `prisma/schema/` (multi-file).
+
+---
+
+## Entity relationship
+
+```text
+Category 1──* MenuItem 1──* MenuItemVariant
+                              │
+Order 1──* OrderItem *────────┘ (nullable FK + snapshots)
+                │
+                └── optional MenuItem FK
+
+User (admin) ── Session / Account   (Better Auth)
+```
+
+Binary files (payment proofs, item images) live in **Cloudflare R2**. Postgres
+stores object keys only.
+
+---
+
+## Enums
+
+### `OrderStatus`
+
+| Value | Meaning |
+| --- | --- |
+| `pending_review` | Submitted; waiting for admin to check payment proof |
+| `confirmed` | Admin accepted payment / order |
+| `rejected` | Admin rejected (bad proof, unavailable item, etc.) |
+| `cancelled` | Cancelled after submit |
+
+Default for new orders: `pending_review`.
+
+### `PaymentChannel`
+
+| Value | UI source |
+| --- | --- |
+| `unionbank` | Happy Moments Food Corporation / Current Account `001990006659` |
+| `gcash` | JON RO**K F. / `0905-745 6950` |
+| `bpi` | John Roderick Felipe / Savings `3299240028` |
+
+---
+
+## Tables
+
+### Auth (`auth.prisma`)
+
+#### `user`
+
+Admin identity + profile search fields.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| id | String (cuid) | PK |
+| name, email | String | email unique |
+| emailVerified | Boolean | Better Auth |
+| image | String? | |
+| firstName, lastName, phoneNumber | String | App profile |
+| roles | String[] | App roles (e.g. admin) |
+| search* / keywords | String / String[] | Search helpers |
+| createdAt, updatedAt | DateTime | |
+
+#### `session`, `account`, `verification`
+
+Standard Better Auth session, credential, and verification token tables.
+Cascade delete from `user`.
+
+---
+
+### Menu (`menu.prisma`)
+
+#### `category`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| id | String (cuid) | PK |
+| name | String | Display name |
+| slug | String | Unique URL/stable key |
+| description | String? | Category blurb |
+| sortOrder | Int | List order |
+| isActive | Boolean | Soft hide |
+| createdAt, updatedAt | DateTime | |
+
+Delete category → cascade delete its items and variants.
+
+#### `menu_item`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| id | String (cuid) | PK |
+| categoryId | String | FK → category |
+| name | String | |
+| slug | String | Unique |
+| description | String? | Longer copy / combo contents |
+| notes | String? | Warning / lead-time note |
+| code | String? | B1, B2, … |
+| sortOrder | Int | |
+| isActive | Boolean | |
+| imageKey | String? | R2 key |
+| createdAt, updatedAt | DateTime | |
+
+#### `menu_item_variant`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| id | String (cuid) | PK |
+| menuItemId | String | FK → menu_item |
+| sizeKey | String | Stable: `family` \| `fiesta` \| `super` \| `unit` |
+| label | String | Display: Family, Fiesta, Super, Per meal |
+| portionLabel | String | Human portion text |
+| pricePhp | Int | Whole pesos |
+| sortOrder | Int | |
+| isActive | Boolean | |
+| createdAt, updatedAt | DateTime | |
+
+Unique: `(menuItemId, sizeKey)`.
+
+---
+
+### Orders (`order.prisma`)
+
+#### `order`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| id | String (cuid) | PK |
+| orderNumber | String | Unique human code, e.g. `HM-20260807-A1B2` |
+| status | OrderStatus | Default `pending_review` |
+| customerName | String | Guest |
+| customerEmail | String | Guest + email receipt target |
+| customerPhone | String | |
+| deliveryAddress | String | Required |
+| deliveryNotes | String? | |
+| eventDate | DateTime | ≥ 2 days ahead (app rule) |
+| paymentChannel | PaymentChannel | |
+| paymentProofKey | String? | R2 key |
+| paymentProofUploadedAt | DateTime? | |
+| subtotalPhp | Int | Sum of lines; **no delivery fee** |
+| adminNotes | String? | |
+| reviewedAt | DateTime? | |
+| reviewedByUserId | String? | Admin user id (no FK required) |
+| createdAt, updatedAt | DateTime | |
+
+Indexes: status, customerEmail, eventDate, createdAt.
+
+#### `order_item`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| id | String (cuid) | PK |
+| orderId | String | FK → order (cascade) |
+| menuItemId | String? | FK → menu_item (SET NULL) |
+| variantId | String? | FK → menu_item_variant (SET NULL) |
+| itemName | String | Snapshot |
+| variantLabel | String | Snapshot |
+| portionLabel | String | Snapshot |
+| unitPricePhp | Int | Snapshot |
+| quantity | Int | ≥ 1 (app validation) |
+| lineTotalPhp | Int | Snapshot total |
+| notes | String? | Per-line customer note |
+| createdAt, updatedAt | DateTime | |
+
+---
+
+## Status lifecycle
+
+```text
+                  submit + proof
+  (guest checkout) ──────────────► pending_review
+                                         │
+                    ┌────────────────────┼────────────────────┐
+                    ▼                    ▼                    ▼
+               confirmed             rejected             cancelled
+```
+
+App may allow limited edits while `pending_review` (admin). Confirmed orders
+should not silently change money fields without an explicit admin edit path.
+
+---
+
+## Storage vs database
+
+| Concern | Where |
+| --- | --- |
+| Menu text, prices, order metadata | Neon / Prisma |
+| Payment screenshot bytes | R2; key on `order.paymentProofKey` |
+| Menu item image bytes | R2; key on `menu_item.imageKey` |
+| Bank account display strings | `constants/payment.ts` (not DB) |
+| Min lead days (2) | `constants/payment.ts` + checkout validation |
+
+---
+
+## Seed and migrations
+
+- Migrations: `prisma/migrations/`
+- Seed (June 15, 2026 price list): `prisma/seed.ts`
+- Commands:
+  - `bun run db:generate`
+  - `bun run db:migrate`
+  - `bun run db:seed`
+
+Seed is upsert-by-slug. Safe to re-run to refresh catalog prices/labels.
+
+---
+
+## Future (not modeled yet)
+
+- FIUU (or other) online payment: likely new payment status fields / provider
+  refs on `order`; keep manual channels until then.
+- Delivery fee: only add a money column if product decides to charge/track it.
+- Email delivery log: optional table if retries/audit become required.
+- Inventory: do not add stock columns unless product explicitly changes scope.

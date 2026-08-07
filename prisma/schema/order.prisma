@@ -1,0 +1,80 @@
+// Guest orders — customer details, line items, manual payment proof.
+
+enum OrderStatus {
+  pending_review
+  confirmed
+  rejected
+  cancelled
+}
+
+enum PaymentChannel {
+  unionbank
+  gcash
+  bpi
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  /// Human-readable code, e.g. HM-20260807-A1B2
+  orderNumber String    @unique
+  status    OrderStatus @default(pending_review)
+
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  deliveryAddress String
+  deliveryNotes   String?
+  /// Event / delivery date. App enforces ≥ 2 days from now.
+  eventDate       DateTime
+
+  paymentChannel         PaymentChannel
+  /// R2 object key for payment screenshot.
+  paymentProofKey        String?
+  paymentProofUploadedAt DateTime?
+
+  /// Sum of line totals in whole PHP. Delivery fee not included.
+  subtotalPhp Int
+
+  adminNotes       String?
+  reviewedAt       DateTime?
+  reviewedByUserId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@index([status])
+  @@index([customerEmail])
+  @@index([eventDate])
+  @@index([createdAt])
+  @@map("order")
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  menuItemId String?
+  menuItem   MenuItem?       @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  variantId  String?
+  variant    MenuItemVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  /// Snapshots so later menu price edits do not rewrite history.
+  itemName     String
+  variantLabel String
+  portionLabel String
+  unitPricePhp Int
+  quantity     Int
+  lineTotalPhp Int
+  notes        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([menuItemId])
+  @@index([variantId])
+  @@map("order_item")
+}

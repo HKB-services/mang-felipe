@@ -1,0 +1,68 @@
+// Food menu — categories, items, size/price variants. No inventory.
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  items       MenuItem[]
+
+  @@index([sortOrder])
+  @@index([isActive])
+  @@map("category")
+}
+
+model MenuItem {
+  id          String            @id @default(cuid())
+  categoryId  String
+  category    Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name        String
+  slug        String            @unique
+  description String?
+  /// Extra UI note, e.g. "Place order at least two days in advance."
+  notes       String?
+  /// Optional display code (B1, B2, …).
+  code        String?
+  sortOrder   Int               @default(0)
+  isActive    Boolean           @default(true)
+  /// R2 object key for item image (optional).
+  imageKey    String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  variants    MenuItemVariant[]
+  orderItems  OrderItem[]
+
+  @@index([categoryId])
+  @@index([sortOrder])
+  @@index([isActive])
+  @@map("menu_item")
+}
+
+/// Size / portion / price row for a menu item (Family, Fiesta, Super, Per meal, …).
+model MenuItemVariant {
+  id           String    @id @default(cuid())
+  menuItemId   String
+  menuItem     MenuItem  @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  /// Stable key: family | fiesta | super | unit
+  sizeKey      String
+  /// Display label: Family, Fiesta, Super, Per meal
+  label        String
+  /// Portion text: "Up to 8 pax", "20 rolls", "1 meal"
+  portionLabel String
+  /// Price in whole PHP pesos.
+  pricePhp     Int
+  sortOrder    Int       @default(0)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  orderItems   OrderItem[]
+
+  @@unique([menuItemId, sizeKey])
+  @@index([menuItemId])
+  @@index([isActive])
+  @@map("menu_item_variant")
+}

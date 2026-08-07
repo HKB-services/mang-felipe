@@ -1,0 +1,11 @@
+// Prisma base — generator + datasource only.
+// Run: bun run db:generate && bun run db:migrate
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

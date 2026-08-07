@@ -111,9 +111,9 @@ explicit, reviewed decision.
 ## Database and Prisma
 
 - Neon PostgreSQL is the system of record for relational application data.
-- Define schema, relations, constraints, and migrations in Prisma. Apply
-production migrations through the repository's reviewed deployment workflow;
-never run ad-hoc schema changes against production.
+- Define schema in `prisma/schema/` (multi-file: one concern per `.prisma`
+  file). Apply production migrations through the repository's reviewed
+  deployment workflow; never run ad-hoc schema changes against production.
 - Use a pooled Neon connection for request-heavy Vercel runtime paths to avoid
 connection exhaustion. Use a direct connection only for tooling that requires
 it.

@@ -1,20 +1,4 @@
-// Prisma schema — Neon PostgreSQL + Better Auth core tables + app models.
-// Run: bun run db:generate && bun run db:migrate
-
-generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-}
-
-datasource db {
-  provider = "postgresql"
-}
-
-enum ClientStatus {
-  active
-  inactive
-  blacklisted
-}
+// Better Auth tables + admin user profile fields.
 
 model User {
   id            String    @id @default(cuid())
@@ -90,29 +74,4 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
-}
-
-model Client {
-  id                     String       @id @default(uuid())
-  fullName               String
-  email                  String?
-  phone                  String?
-  address                String?
-  nationality            String?
-  totalInvested          Float        @default(0)
-  totalActiveInvestments Int          @default(0)
-  status                 ClientStatus @default(active)
-  searchFullName         String       @default("")
-  searchEmail            String?
-  searchPhone            String?
-  keywords               String[]     @default([])
-  notes                  String?
-  createdAt              DateTime     @default(now())
-  updatedAt              DateTime     @updatedAt
-
-  @@index([searchFullName])
-  @@index([searchEmail])
-  @@index([searchPhone])
-  @@index([status])
-  @@map("client")
 }
