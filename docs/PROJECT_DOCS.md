@@ -64,6 +64,7 @@ Guest checkout flow below. No customer login.
 - Branding assets: `public/branding/` (Mang Felipe main).
 - No inventory / stock tracking.
 - Manual payment now; FIUU later.
+  Guide: `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`.
 - Delivery: collect address + notes. Delivery fee **not included**.
 - Packed Meals: orderable option (from ₱120/meal) + contact phone for menu.
 - Menu seed: `bun run db:seed` (June 15, 2026 price list).

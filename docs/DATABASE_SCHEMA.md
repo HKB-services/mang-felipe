@@ -322,8 +322,9 @@ Seed is upsert-by-slug. Safe to re-run to refresh catalog prices/labels.
 
 ## Future (not modeled yet)
 
-- FIUU (or other) online payment: likely new payment status fields / provider
-  refs on `order`; keep manual channels until then.
+- FIUU (or other) online payment: see
+  `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`. Likely new payment status fields /
+  provider refs on `order`; keep manual channels until then.
 - Delivery fee: only add a money column if product decides to charge/track it.
 - Email delivery log: optional table if retries/audit become required.
 - Inventory: do not add stock columns unless product explicitly changes scope.
