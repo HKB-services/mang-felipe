@@ -1,18 +1,38 @@
+# Dependency directories
 node_modules
+
+# Next.js build/output directories
 .Next
 .next
+
+# Production/build outputs
 out
 dist
 build
+
+# Test coverage reports
 coverage
+
+# Turbo repo cache
 .turbo
+
+# Vercel deployment directory
 .vercel
+
+# System files
 .DS_Store
+
+# Private keys / certificates
 *.pem
+
+# Log files
 *.log
-.env
-.env.*
-!.env.example
+
+# Prisma generated code
 /generated/prisma
+
+# TypeScript build info
 tsconfig.tsbuildinfo
+
+# Graphify analysis output
 graphify-out
