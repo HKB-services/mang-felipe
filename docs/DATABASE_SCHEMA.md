@@ -10,14 +10,39 @@ Stack rules: `docs/TECHNOLOGY_STACK.md`.
 
 | Who | What |
 | --- | --- |
-| Customer (guest) | Browse menu, pick size/qty, checkout with delivery details, pay offline, upload payment screenshot. Receives order email. No login. |
+| Customer (guest) | Home + History + browse menu, pick size/qty, checkout with delivery details, pay offline, upload payment screenshot. Receives order email. No login. |
 | Admin | Login via Better Auth. CRUD menu. Review orders and payment proofs. Confirm / reject / edit. |
 
-**Not in scope for the schema:** inventory/stock, online payment gateway (FIUU later), customer accounts, delivery-fee calculation.
+**Parent business:** Happy Moments Food Corporation.
+
+**Public brands (marketing / UI — not separate DB tables yet):**
+
+| Brand | Role |
+| --- | --- |
+| Mang Felipe | **Main app brand** (home hero, nav, primary identity) |
+| Raken Rolls | Sister line (Lumpia, Turon, atbp.) — shown on Home + History |
+| Oh My Bilao! | Sister bilao/party line — shown on Home + History |
+
+Logo reference: `public/branding/brand-logos.png`. Product page scope:
+`docs/PROJECT_DOCS.md` (Home, History, Order form).
+
+**Not in scope for the schema:** inventory/stock, online payment gateway (FIUU later), customer accounts, delivery-fee calculation, CMS tables for History copy (static page first).
 
 ---
 
 ## Domain rules
+
+### Public marketing (no DB models)
+
+1. **Home** and **History** are public pages. Copy + logos live in app/static
+   assets for v1, not Postgres.
+2. Mang Felipe is the primary brand mark everywhere chrome/nav appears.
+3. History explains how the business started and presents all three logos.
+4. Optional later: brand or CMS tables only if owner needs editable story/copy
+   without deploys. Do not add until that need is real.
+5. Menu categories may be *presented* under sister-brand flavor in UI
+   (rolls → Raken Rolls, bilao packs → Oh My Bilao!), but catalog rows stay
+   `Category` / `MenuItem` / `MenuItemVariant` only.
 
 ### Menu
 
@@ -302,3 +327,4 @@ Seed is upsert-by-slug. Safe to re-run to refresh catalog prices/labels.
 - Delivery fee: only add a money column if product decides to charge/track it.
 - Email delivery log: optional table if retries/audit become required.
 - Inventory: do not add stock columns unless product explicitly changes scope.
+- Brand / History CMS: only if static Home + History pages become insufficient.

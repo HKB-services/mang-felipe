@@ -2,12 +2,47 @@
 
 ## Product
 
-**Happy Moments Food Corporation** (Mang Felipe) — catering order form + admin
-dashboard.
+**Happy Moments Food Corporation** — catering brands under one business.
+Public site: home, business history, and guest ordering. Admin dashboard for
+menu CRUD and order confirmation. No inventory. FIUU payment portal later
+(pending).
 
-Customers browse food items, pick size/qty, place order, pay via bank/e-wallet
-transfer, upload payment screenshot. Admin CRUD menu items and confirm/edit
-orders. No inventory. FIUU payment portal later (pending).
+Primary public brand for this app: **Mang Felipe**.
+
+## Brands / logos
+
+Three circular logos under Happy Moments Food Corporation. Reference image:
+`public/branding/brand-logos.png`.
+
+| Brand | Role | Look |
+| --- | --- | --- |
+| **Mang Felipe** | **Main brand** for this app (home, header, primary identity) | Dark forest-green circle, white serif “Mang / Felipe” |
+| **Raken Rolls** | Sister / snack line (Lumpia, Turon, etc.) shown on home + history | Bright red circle, bubbly “RAKEN ROLLS”, tagline “LUMPIA, TURON, atbp.” |
+| **Oh My Bilao!** | Sister / bilao party line shown on home + history | Orange-coral circle, rounded “Oh My / Bilao!” |
+
+Use Mang Felipe as the hero/nav mark. Show all three on Home and History to
+tell the full business story. Do not invent a fourth brand mark.
+
+## Public pages
+
+### Home
+
+- Brand-first first viewport: Mang Felipe as the dominant identity.
+- Short pitch + CTA into the order form / menu.
+- Introduce the three brands (Mang Felipe primary; Raken Rolls + Oh My Bilao!
+  as related lines under Happy Moments Food Corporation).
+
+### History (how the business started)
+
+- Story page: how Happy Moments Food Corporation / Mang Felipe began.
+- Show the three logos and how the lines relate (main catering vs rolls vs
+  bilao packs).
+- Keep marketing copy editable later; for v1 static content in the feature is
+  fine unless owner supplies a CMS need.
+
+### Order form (customer)
+
+Guest checkout flow below. No customer login.
 
 ## Current decisions
 
@@ -26,6 +61,7 @@ orders. No inventory. FIUU payment portal later (pending).
 - Files: Cloudflare R2 via S3-compatible SDK and short-lived presigned uploads.
   Payment proof screenshots + item images go to R2.
   Setup: `docs/CLOUDFLARE_STORAGE_SETUP.md`.
+- Branding assets: `public/branding/` (Mang Felipe main).
 - No inventory / stock tracking.
 - Manual payment now; FIUU later.
 - Delivery: collect address + notes. Delivery fee **not included**.
@@ -34,14 +70,16 @@ orders. No inventory. FIUU payment portal later (pending).
 
 ## Customer flow (public)
 
-1. Browse menu by category.
-2. Add items with size variant (Family / Fiesta / Super / Per meal where available).
-3. Checkout: name, email, phone, delivery address, event/delivery date
+1. Land on Home (Mang Felipe primary; sister brands visible).
+2. Optional: read History (how the business started).
+3. Browse menu by category.
+4. Add items with size variant (Family / Fiesta / Super / Per meal where available).
+5. Checkout: name, email, phone, delivery address, event/delivery date
    (min **2 days** advance), notes.
-4. Pay offline via UnionBank / GCash / BPI (details below).
-5. Upload payment screenshot + submit order.
-6. Customer receives order-details email.
-7. Admin reviews proof and confirms or rejects order.
+6. Pay offline via UnionBank / GCash / BPI (details below).
+7. Upload payment screenshot + submit order.
+8. Customer receives order-details email.
+9. Admin reviews proof and confirms or rejects order.
 
 ## Admin flow (protected)
 
@@ -72,6 +110,10 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
 
 - Categories: Pansit; Pork/Chicken/Beef; Seafood/Fish; Vegetables; Lumpia;
   Dynamite; Turon; Minatamis; Rice; Halo-Halo Bilao; Party Bilao; Packed Meals.
+- Sister-brand flavor mapping (UI only for now, not separate DB brands):
+  - Mang Felipe → core catering trays (pansit, meats, seafood, veggies, rice, …)
+  - Raken Rolls → Lumpia / Dynamite / Turon style rolls
+  - Oh My Bilao! → Halo-Halo Bilao / Party Bilao packs
 - Sizes not uniform: some items skip Family; portion text varies
   (pax / kilos / sticks / rolls / per meal).
 - Business rules from menu:
@@ -88,6 +130,7 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
 - Customer accounts / order history login.
 - Delivery fee calculator.
 - SMS notifications.
+- CMS for History copy (static page first).
 
 ## Local bootstrap
 
