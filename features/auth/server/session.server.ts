@@ -1,6 +1,6 @@
 import { headers } from "next/headers"
 import { auth } from "@/features/auth/server/auth"
-import type { ROLES } from "@/features/users/schema/user.schema"
+import type { ROLES } from "@/features/admin/users/schema/user.schema"
 
 export interface SessionUser {
   id: string

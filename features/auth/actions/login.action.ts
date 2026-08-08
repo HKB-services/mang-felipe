@@ -6,43 +6,8 @@ import { headers } from "next/headers"
 import { auth } from "@/features/auth/server/auth"
 import { deleteServerSession } from "@/features/auth/server/session.server"
 import { prisma } from "@/lib/prisma"
-import type { UserWithoutPassword } from "@/features/users/schema/user.schema"
 import { getAuthErrorMessage } from "@/features/auth/utils/get-auth-error-message"
-import { extractObjectKey } from "@/lib/storage/object-path"
-import { resolveObjectReadUrl } from "@/lib/storage/r2.server"
-
-async function mapUser(user: {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-  phoneNumber: string
-  image: string | null
-  roles: string[]
-  searchFirstName: string
-  searchLastName: string
-  searchFullName: string
-  searchEmail: string
-  createdAt: Date
-  updatedAt: Date
-}): Promise<UserWithoutPassword> {
-  const key = extractObjectKey(user.image)
-  return {
-    id: user.id,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    phoneNumber: user.phoneNumber,
-    photoURL: key ? await resolveObjectReadUrl(key) : null,
-    roles: user.roles,
-    searchFirstName: user.searchFirstName,
-    searchLastName: user.searchLastName,
-    searchFullName: user.searchFullName,
-    searchEmail: user.searchEmail,
-    createdAt: user.createdAt.toISOString(),
-    updatedAt: user.updatedAt.toISOString(),
-  }
-}
+import { mapPrismaUserToProfile } from "@/features/admin/users/server/map-user"
 
 export const LoginAction = actionClient
   .metadata({ actionName: "login" })
@@ -75,7 +40,7 @@ export const LoginAction = actionClient
       return {
         success: true,
         message: "Login successful",
-        user: await mapUser(user),
+        user: await mapPrismaUserToProfile(user),
       }
     } catch (error) {
       return {

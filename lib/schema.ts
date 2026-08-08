@@ -1,5 +1,5 @@
-import { ROLES as UserROLES, UserSchema, type User, type UserWithoutPassword } from "@/features/users/schema/user.schema"
-import { RoleSchema, type Role } from "@/features/users/schema/role.schema"
+import { ROLES as UserROLES, UserSchema, type User, type UserWithoutPassword } from "@/features/admin/users/schema/user.schema"
+import { RoleSchema, type Role } from "@/features/admin/users/schema/role.schema"
 
 export const COLLECTIONS = {
   USERS: "users",

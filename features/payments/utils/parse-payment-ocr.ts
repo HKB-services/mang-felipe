@@ -1,5 +1,9 @@
 import { z } from "zod"
-import { PAYMENT_CHANNELS, PAYMENT_CHANNEL_LIST, type PaymentChannelId } from "@/constants/payment"
+import {
+  PAYMENT_CHANNELS,
+  PAYMENT_CHANNEL_LIST,
+  type PaymentChannelId,
+} from "@/constants/payment"
 
 export const PaymentProofOcrSchema = z.object({
   rawText: z.string(),
@@ -21,37 +25,38 @@ const REFERENCE_PATTERNS = [
   /(?:ref(?:erence)?(?:\s*(?:no|number|#))?|txn(?:\s*id)?|transaction(?:\s*(?:id|no))?|trace(?:\s*no)?)\s*[:\-]?\s*([A-Z0-9\-]+)/i,
 ]
 
-function parseAmountPhp(text: string): number | null {
-  for (const pattern of AMOUNT_PATTERNS) {
+const CHANNEL_HINTS: Array<{ id: PaymentChannelId; needles: string[] }> = [
+  { id: "gcash", needles: ["gcash", "g-cash"] },
+  { id: "unionbank", needles: ["unionbank", "union bank"] },
+  { id: "bpi", needles: ["bpi", "bank of the philippine islands"] },
+]
+
+function firstMatch(text: string, patterns: RegExp[]) {
+  for (const pattern of patterns) {
     const match = text.match(pattern)
-    if (!match?.[1]) continue
-    const value = Number(match[1].replace(/,/g, ""))
-    if (Number.isFinite(value) && value > 0) return value
+    if (match?.[1]) return match[1]
   }
   return null
 }
 
+function parseAmountPhp(text: string): number | null {
+  const raw = firstMatch(text, AMOUNT_PATTERNS)
+  if (!raw) return null
+  const value = Number(raw.replace(/,/g, ""))
+  return Number.isFinite(value) && value > 0 ? value : null
+}
+
 function parseReference(text: string): string | null {
-  for (const pattern of REFERENCE_PATTERNS) {
-    const match = text.match(pattern)
-    if (match?.[1]) return match[1].trim()
-  }
-  return null
+  const raw = firstMatch(text, REFERENCE_PATTERNS)
+  return raw?.trim() ?? null
 }
 
 function detectChannel(text: string): PaymentChannelId | null {
   const lower = text.toLowerCase()
-  if (lower.includes("gcash") || lower.includes("g-cash")) return "gcash"
-  if (lower.includes("unionbank") || lower.includes("union bank")) {
-    return "unionbank"
-  }
-  if (
-    lower.includes("bpi") ||
-    lower.includes("bank of the philippine islands")
-  ) {
-    return "bpi"
-  }
-  return null
+  const hit = CHANNEL_HINTS.find((entry) =>
+    entry.needles.some((needle) => lower.includes(needle))
+  )
+  return hit?.id ?? null
 }
 
 function matchAccountHint(
@@ -59,23 +64,35 @@ function matchAccountHint(
   channel: PaymentChannelId | null
 ): string | null {
   const digits = text.replace(/\D/g, "")
-  const channels = channel
-    ? [PAYMENT_CHANNELS[channel]]
-    : PAYMENT_CHANNEL_LIST
+  const lower = text.toLowerCase()
+  const channels = channel ? [PAYMENT_CHANNELS[channel]] : PAYMENT_CHANNEL_LIST
 
   for (const entry of channels) {
     const expected = entry.accountDetail.replace(/\D/g, "")
     if (expected.length >= 6 && digits.includes(expected)) {
       return `${entry.label} ${entry.accountDetailLabel}: ${entry.accountDetail}`
     }
-    if (
-      entry.accountName &&
-      text.toLowerCase().includes(entry.accountName.toLowerCase())
-    ) {
+    if (lower.includes(entry.accountName.toLowerCase())) {
       return `Account name matches ${entry.label}: ${entry.accountName}`
     }
   }
   return null
+}
+
+function scoreOcrConfidence(parts: {
+  amount: boolean
+  reference: boolean
+  channel: boolean
+  account: boolean
+}) {
+  return Math.min(
+    1,
+    0.2 +
+      (parts.amount ? 0.3 : 0) +
+      (parts.reference ? 0.25 : 0) +
+      (parts.channel ? 0.15 : 0) +
+      (parts.account ? 0.1 : 0)
+  )
 }
 
 /**
@@ -89,18 +106,17 @@ export function parsePaymentProofText(rawText: string): PaymentProofOcrResult {
   const detectedReference = parseReference(normalized)
   const matchedAccountHint = matchAccountHint(normalized, detectedChannel)
 
-  let confidence = 0.2
-  if (detectedAmountPhp) confidence += 0.3
-  if (detectedReference) confidence += 0.25
-  if (detectedChannel) confidence += 0.15
-  if (matchedAccountHint) confidence += 0.1
-
   return {
     rawText: normalized,
     detectedAmountPhp,
     detectedReference,
     detectedChannel,
     matchedAccountHint,
-    confidence: Math.min(1, confidence),
+    confidence: scoreOcrConfidence({
+      amount: Boolean(detectedAmountPhp),
+      reference: Boolean(detectedReference),
+      channel: Boolean(detectedChannel),
+      account: Boolean(matchedAccountHint),
+    }),
   }
 }

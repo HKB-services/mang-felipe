@@ -5,7 +5,7 @@ import {
   ROLES,
   UserClientWritableOmit,
   UserSchema,
-} from "@/features/users/schema/user.schema"
+} from "@/features/admin/users/schema/user.schema"
 import { z } from "zod"
 import {
   Field,

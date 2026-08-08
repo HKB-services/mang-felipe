@@ -1,4 +1,4 @@
-import type { UserSearchFields } from "@/features/users/schema/user.schema"
+import type { UserSearchFields } from "@/features/admin/users/schema/user.schema"
 
 export type UserSearchInput = {
   firstName: string

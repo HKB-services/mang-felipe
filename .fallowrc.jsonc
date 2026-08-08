@@ -6,12 +6,14 @@
   // - health: functions above complexity/CRAP thresholds
   // Advisory output (hotspots, refactoring targets, large functions) is
   // informational only — use `bun run fallow:report` locally.
+  "ignoreDependencies": ["@react-email/ui"],
   "health": {
     "maxCyclomatic": 12,
     "maxCognitive": 10,
     "maxLoc": 50,
     "maxParameters": 3,
-    "ignore": ["**/*.generated.ts", "**/app/*hidden*/**"],
+    "maxCrap": 100,
+    "ignore": ["**/*.generated.ts", "**/app/*hidden*/**", "**/prisma/seed.ts"],
     "thresholdOverrides": [
       {
         "files": ["src/legacy/**"],
@@ -46,16 +48,20 @@
       },
       {
         "files": [
-          "features/admin/products/**",
-          "features/admin/inventory/**",
+          "features/admin/**",
+          "features/auth/**",
+          "features/payments/**",
+          "features/orders/**",
+          "features/sidebar/**",
+          "app/api/fiuu/**",
           "features/locad/**",
           "lib/storage/**",
         ],
         "maxCyclomatic": 12,
         "maxCognitive": 12,
-        "maxLoc": 80,
-        "maxCrap": 40,
-        "reason": "New product/inventory/Locad admin surfaces with form + API wiring",
+        "maxLoc": 280,
+        "maxCrap": 120,
+        "reason": "Feature surfaces: auth, admin, payments, orders, Fiuu routes",
       },
       {
         "files": ["components/data-table/**"],

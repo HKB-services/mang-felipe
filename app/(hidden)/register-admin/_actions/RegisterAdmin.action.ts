@@ -8,14 +8,12 @@ import { env } from "@/config/env"
 import {
   UserClientWritableOmit,
   UserSchema,
-  type UserWithoutPassword,
-} from "@/features/users/schema/user.schema"
+} from "@/features/admin/users/schema/user.schema"
 import { getAuthErrorMessage } from "@/features/auth/utils/get-auth-error-message"
 import { createUserSearchFields } from "@/lib/search/create-user-search-fields"
 import { auth } from "@/features/auth/server/auth"
 import { headers } from "next/headers"
-import { extractObjectKey } from "@/lib/storage/object-path"
-import { resolveObjectReadUrl } from "@/lib/storage/r2.server"
+import { mapPrismaUserToProfile } from "@/features/admin/users/server/map-user"
 
 export const RegsiterAdminAction = actionClient
   .metadata({ actionName: "registerAdmin" })
@@ -82,23 +80,7 @@ export const RegsiterAdminAction = actionClient
         },
       })
 
-      const adminUser: UserWithoutPassword = {
-        id: admin.id,
-        firstName: admin.firstName,
-        lastName: admin.lastName,
-        email: admin.email,
-        roles: admin.roles,
-        phoneNumber: admin.phoneNumber,
-        photoURL: extractObjectKey(admin.image)
-          ? await resolveObjectReadUrl(extractObjectKey(admin.image)!)
-          : null,
-        searchFirstName: admin.searchFirstName,
-        searchLastName: admin.searchLastName,
-        searchFullName: admin.searchFullName,
-        searchEmail: admin.searchEmail,
-        createdAt: admin.createdAt.toISOString(),
-        updatedAt: admin.updatedAt.toISOString(),
-      }
+      const adminUser = await mapPrismaUserToProfile(admin)
 
       return {
         success: true,

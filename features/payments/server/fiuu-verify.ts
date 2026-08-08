@@ -13,24 +13,32 @@ export type FiuuNotifyPayload = {
   [key: string]: string | undefined
 }
 
+function field(payload: FiuuNotifyPayload, key: keyof FiuuNotifyPayload) {
+  return payload[key] ?? ""
+}
+
 export function verifyFiuuNotifySkey(payload: FiuuNotifyPayload): boolean {
   const { secretKey } = getFiuuConfig()
-
-  const tranID = payload.tranID ?? ""
-  const orderid = payload.orderid ?? ""
-  const status = payload.status ?? ""
-  const domain = payload.domain ?? ""
-  const amount = payload.amount ?? ""
-  const currency = payload.currency ?? ""
-  const paydate = payload.paydate ?? ""
-  const appcode = payload.appcode ?? ""
-  const skey = payload.skey ?? ""
-
   const preSkey = md5Hex(
-    tranID + orderid + status + domain + amount + currency
+    [
+      field(payload, "tranID"),
+      field(payload, "orderid"),
+      field(payload, "status"),
+      field(payload, "domain"),
+      field(payload, "amount"),
+      field(payload, "currency"),
+    ].join("")
   )
-  const expected = md5Hex(paydate + domain + preSkey + appcode + secretKey)
-  return expected === skey
+  const expected = md5Hex(
+    [
+      field(payload, "paydate"),
+      field(payload, "domain"),
+      preSkey,
+      field(payload, "appcode"),
+      secretKey,
+    ].join("")
+  )
+  return expected === field(payload, "skey")
 }
 
 export function isFiuuPaymentSuccess(status: string | undefined) {

@@ -30,12 +30,12 @@ import {
   getAccountProfileAction,
   updateAccountProfileAction,
 } from "@/features/auth/actions/account.action"
-import { UserProfileUpdateSchema } from "@/features/users/schema/user.schema"
+import { UserProfileUpdateSchema } from "@/features/admin/users/schema/user.schema"
 import { uploadFile } from "@/lib/storage/client.storage"
 import { cn, isNotNull } from "@/lib/utils"
 import { sileo } from "sileo"
 import { ROUTES } from "@/constants/app.routes"
-import { UserWithoutPassword } from "@/features/users/schema/user.schema"
+import { UserWithoutPassword } from "@/features/admin/users/schema/user.schema"
 import { IconCamera } from "@tabler/icons-react"
 
 async function uploadPendingFile(

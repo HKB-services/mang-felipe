@@ -20,7 +20,7 @@ import { changePasswordAction } from "@/features/auth/actions/account.action"
 import {
   UserChangePasswordSchema,
   type UserChangePassword,
-} from "@/features/users/schema/user.schema"
+} from "@/features/admin/users/schema/user.schema"
 import { sileo } from "sileo"
 
 const SecurityPage = () => {

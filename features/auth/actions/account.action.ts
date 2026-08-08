@@ -4,54 +4,20 @@ import { ActionError, authActionClient } from "@/lib/safe.action"
 import {
   UserChangePasswordSchema,
   UserProfileUpdateSchema,
-  type UserWithoutPassword,
-} from "@/features/users/schema/user.schema"
+} from "@/features/admin/users/schema/user.schema"
 import { prisma } from "@/lib/prisma"
 import { createUserSearchFields } from "@/lib/search/create-user-search-fields"
 import { auth } from "@/features/auth/server/auth"
 import { headers } from "next/headers"
 import { getAuthErrorMessage } from "@/features/auth/utils/get-auth-error-message"
 import { extractObjectKey } from "@/lib/storage/object-path"
-import { resolveObjectReadUrl } from "@/lib/storage/r2.server"
+import { mapPrismaUserToProfile } from "@/features/admin/users/server/map-user"
 
 const ACTION_NAME = {
   GET_ACCOUNT_PROFILE: "getAccountProfile",
   UPDATE_ACCOUNT_PROFILE: "updateAccountProfile",
   CHANGE_PASSWORD: "changePassword",
 } as const
-
-async function mapUser(user: {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-  phoneNumber: string
-  image: string | null
-  roles: string[]
-  searchFirstName: string
-  searchLastName: string
-  searchFullName: string
-  searchEmail: string
-  createdAt: Date
-  updatedAt: Date
-}): Promise<UserWithoutPassword> {
-  const key = extractObjectKey(user.image)
-  return {
-    id: user.id,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    phoneNumber: user.phoneNumber,
-    photoURL: key ? await resolveObjectReadUrl(key) : null,
-    roles: user.roles,
-    searchFirstName: user.searchFirstName,
-    searchLastName: user.searchLastName,
-    searchFullName: user.searchFullName,
-    searchEmail: user.searchEmail,
-    createdAt: user.createdAt.toISOString(),
-    updatedAt: user.updatedAt.toISOString(),
-  }
-}
 
 export const getAccountProfileAction = authActionClient
   .metadata({ actionName: ACTION_NAME.GET_ACCOUNT_PROFILE })
@@ -66,7 +32,10 @@ export const getAccountProfileAction = authActionClient
       return { success: false as const, message: "User not found" }
     }
 
-    return { success: true as const, user: await mapUser(user) }
+    return {
+      success: true as const,
+      user: await mapPrismaUserToProfile(user),
+    }
   })
 
 async function persistAccountProfileUpdate(
@@ -104,7 +73,7 @@ async function persistAccountProfileUpdate(
 
   return {
     success: true as const,
-    user: await mapUser(updated),
+    user: await mapPrismaUserToProfile(updated),
     message: "Profile updated",
   }
 }

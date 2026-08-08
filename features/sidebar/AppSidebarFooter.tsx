@@ -1,7 +1,7 @@
 "use client"
 
 import { SidebarFooter } from "@/components/ui/sidebar"
-import { UserWithoutPassword } from "@/features/users/schema/user.schema"
+import { UserWithoutPassword } from "@/features/admin/users/schema/user.schema"
 import { useAtomValue } from "jotai"
 import { userAuthAtom } from "../auth/atom/User.auth.atom"
 import { NavUser } from "./NavUser"
