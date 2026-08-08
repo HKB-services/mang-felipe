@@ -17,11 +17,12 @@ export const env = createEnv({
     ELASTIC_MAIL_DOMAIN: z.string().optional(),
     ELASTIC_MAIL_API_KEY: z.string().optional(),
     ELASTIC_MAIL_API_URL: z.string().optional(),
-    FIUU_MERCHANT_ID: z.string().min(1),
-    FIUU_VERIFY_KEY: z.string().min(1),
-    FIUU_SECRET_KEY: z.string().min(1),
-    FIUU_API_BASE_URL: z.string().min(1),
-    FIUU_PAY_URL: z.string().min(1),
+    /** Required only when ENABLE_FIUU_PAYMENT is true. */
+    FIUU_MERCHANT_ID: z.string().optional(),
+    FIUU_VERIFY_KEY: z.string().optional(),
+    FIUU_SECRET_KEY: z.string().optional(),
+    FIUU_API_BASE_URL: z.string().optional(),
+    FIUU_PAY_URL: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),

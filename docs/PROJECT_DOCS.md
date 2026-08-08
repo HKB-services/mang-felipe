@@ -63,8 +63,10 @@ Guest checkout flow below. No customer login.
   Setup: `docs/CLOUDFLARE_STORAGE_SETUP.md`.
 - Branding assets: `public/branding/` (Mang Felipe main).
 - No inventory / stock tracking.
-- Manual payment now; FIUU later.
-  Guide: `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`.
+- Manual payment now; FIUU later (toggle: `ENABLE_FIUU_PAYMENT` in
+  `constants/payment.ts`). Guide: `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`.
+  Manual path uses tesseract.js OCR assist on payment screenshots
+  (`features/payments/`).
 - Delivery: collect address + notes. Delivery fee **not included**.
 - Packed Meals: orderable option (from ₱120/meal) + contact phone for menu.
 - Menu seed: `bun run db:seed` — structure from June 15, 2026 list; default

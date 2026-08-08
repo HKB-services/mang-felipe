@@ -3,6 +3,18 @@
  * Public business details — not secrets.
  */
 
+/**
+ * Payment mode toggle.
+ * - `false` → manual UnionBank / GCash / BPI + screenshot (+ OCR assist)
+ * - `true`  → Fiuu hosted payment (needs FIUU_* env + live merchant)
+ *
+ * Flip this one boolean while waiting on Fiuu / when going live.
+ */
+export const ENABLE_FIUU_PAYMENT = false as boolean
+
+export const isFiuuPaymentEnabled = () => ENABLE_FIUU_PAYMENT
+export const isManualPaymentEnabled = () => !ENABLE_FIUU_PAYMENT
+
 export const PAYMENT_CHANNELS = {
   unionbank: {
     id: "unionbank",

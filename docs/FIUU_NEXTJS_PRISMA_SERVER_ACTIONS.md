@@ -2,12 +2,15 @@
 
 ## Next.js + Neon + Prisma + Server Actions
 
-**Status:** Pending. Current production path is manual bank/GCash/BPI transfer +
-payment screenshot (`PaymentChannel` + R2 proof). Implement Fiuu only after
-manual checkout works and merchant credentials exist.
+**Status:** Scaffold ready behind `ENABLE_FIUU_PAYMENT` in
+`constants/payment.ts` (default `false` = manual + OCR). Flip to `true` when
+merchant credentials and notify URLs are live.
+
+Implementation lives in `features/payments/` + `app/api/fiuu/`.
 
 Do **not** reintroduce Firebase. Stack: see `docs/TECHNOLOGY_STACK.md`.
 Order domain: see `docs/DATABASE_SCHEMA.md`.
+Payments feature notes: `features/payments/payments.docs.md`.
 
 ### Locked stack used by this guide
 
