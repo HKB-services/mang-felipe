@@ -31,7 +31,6 @@ async function mapUser(user: {
   searchLastName: string
   searchFullName: string
   searchEmail: string
-  keywords: string[]
   createdAt: Date
   updatedAt: Date
 }): Promise<UserWithoutPassword> {
@@ -48,7 +47,6 @@ async function mapUser(user: {
     searchLastName: user.searchLastName,
     searchFullName: user.searchFullName,
     searchEmail: user.searchEmail,
-    keywords: user.keywords,
     createdAt: user.createdAt.toISOString(),
     updatedAt: user.updatedAt.toISOString(),
   }

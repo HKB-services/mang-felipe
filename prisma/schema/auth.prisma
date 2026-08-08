@@ -17,7 +17,6 @@ model User {
   searchLastName  String   @default("")
   searchFullName  String   @default("")
   searchEmail     String   @default("")
-  keywords        String[] @default([])
 
   sessions Session[]
   accounts Account[]

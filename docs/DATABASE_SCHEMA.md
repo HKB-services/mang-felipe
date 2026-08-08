@@ -174,7 +174,7 @@ Admin identity + profile search fields.
 | image | String? | |
 | firstName, lastName, phoneNumber | String | App profile |
 | roles | String[] | App roles (e.g. admin) |
-| search* / keywords | String / String[] | Search helpers |
+| search* | String | Lowercased prefix-search helpers |
 | createdAt, updatedAt | DateTime | |
 
 #### `session`, `account`, `verification`

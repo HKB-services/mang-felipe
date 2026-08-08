@@ -50,7 +50,6 @@ export const RegsiterAdminAction = actionClient
         firstName,
         lastName,
         email,
-        roles,
       })
 
       const signedUp = await auth.api.signUpEmail({
@@ -97,7 +96,6 @@ export const RegsiterAdminAction = actionClient
         searchLastName: admin.searchLastName,
         searchFullName: admin.searchFullName,
         searchEmail: admin.searchEmail,
-        keywords: admin.keywords,
         createdAt: admin.createdAt.toISOString(),
         updatedAt: admin.updatedAt.toISOString(),
       }
