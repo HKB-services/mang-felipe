@@ -1,5 +1,5 @@
 import React from "react"
-import SecurityPage from "@/features/security/SecurityPage"
+import SecurityPage from "@/features/admin/security/SecurityPage"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {

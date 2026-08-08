@@ -66,22 +66,22 @@ Logo reference: `public/branding/brand-logos.png`. Product page scope:
 ### Ordering
 
 1. Customers do **not** have user accounts. Order rows own all customer fields.
-2. Checkout must collect: name, email, phone, delivery address, event/delivery
-   date, optional delivery notes.
-3. `eventDate` must be at least **2 calendar days** from order time
-   (`ORDER_MIN_LEAD_DAYS` in `constants/payment.ts`). Enforce in app validation.
-4. Customer picks a **payment channel**: UnionBank, GCash, or BPI. Account
-   details shown in UI come from `constants/payment.ts` (not stored per order
-   beyond the channel enum).
-5. Customer uploads a **payment screenshot** to R2. Order stores
+2. Checkout must collect: name, phone, optional email, pickup **or** delivery,
+   fulfillment date (≥ **next calendar day**), one of three time slots
+   (10–12 / 14–16 / 17–19), address when delivery, optional notes.
+3. `fulfillmentDate` min lead = `ORDER_MIN_LEAD_DAYS` (1) in
+   `constants/payment.ts`. Some menu items may still show a stricter note
+   (e.g. Lechon 2-day) on the item itself.
+4. Slots: `FULFILLMENT_SLOTS` / enum `FulfillmentSlot`.
+5. Customer picks a **payment channel**: UnionBank, GCash, or BPI (manual mode).
+6. Customer uploads a **payment screenshot** to R2 when manual. Order stores
    `paymentProofKey` + `paymentProofUploadedAt`.
-6. New orders start as `pending_review`.
-7. Admin may set `confirmed`, `rejected`, or `cancelled`, with optional
+7. New orders start as `pending_review`.
+8. Admin may set `confirmed`, `rejected`, or `cancelled`, with optional
    `adminNotes`, `reviewedAt`, `reviewedByUserId`.
-8. **Delivery fee is never stored or computed.** `subtotalPhp` is food line
+9. **Delivery fee is never stored or computed.** `subtotalPhp` is food line
    totals only. UI must state delivery fee is not included.
-9. After submit, send order-details email to `customerEmail` (app concern;
-   schema only stores the address).
+10. If `customerEmail` present, send order-details email after submit.
 
 ### Money and line items
 
@@ -236,6 +236,15 @@ Unique: `(menuItemId, sizeKey)`.
 
 ### Orders (`order.prisma`)
 
+#### Enums (orders)
+
+| Enum | Values |
+| --- | --- |
+| `OrderStatus` | `pending_review`, `confirmed`, `rejected`, `cancelled` |
+| `PaymentChannel` | `unionbank`, `gcash`, `bpi` |
+| `FulfillmentType` | `pickup`, `delivery` |
+| `FulfillmentSlot` | `slot_10_12`, `slot_14_16`, `slot_17_19` |
+
 #### `order`
 
 | Column | Type | Notes |
@@ -244,11 +253,13 @@ Unique: `(menuItemId, sizeKey)`.
 | orderNumber | String | Unique human code, e.g. `HM-20260807-A1B2` |
 | status | OrderStatus | Default `pending_review` |
 | customerName | String | Guest |
-| customerEmail | String | Guest + email receipt target |
+| customerEmail | String? | Optional; receipt only when set |
 | customerPhone | String | |
-| deliveryAddress | String | Required |
+| fulfillmentType | FulfillmentType | Pickup or delivery |
+| fulfillmentDate | DateTime | ≥ next calendar day |
+| fulfillmentSlot | FulfillmentSlot | 10–12 / 14–16 / 17–19 |
+| deliveryAddress | String? | Required when `delivery` |
 | deliveryNotes | String? | |
-| eventDate | DateTime | ≥ 2 days ahead (app rule) |
 | paymentChannel | PaymentChannel | |
 | paymentProofKey | String? | R2 key |
 | paymentProofUploadedAt | DateTime? | |
@@ -258,7 +269,10 @@ Unique: `(menuItemId, sizeKey)`.
 | reviewedByUserId | String? | Admin user id (no FK required) |
 | createdAt, updatedAt | DateTime | |
 
-Indexes: status, customerEmail, eventDate, createdAt.
+Indexes: status, customerEmail, fulfillmentDate, fulfillmentType, createdAt.
+
+Form Zod: `features/orders/schema/order-checkout.schema.ts`.
+Slot labels: `constants/payment.ts` → `FULFILLMENT_SLOTS`.
 
 #### `order_item`
 
@@ -303,7 +317,8 @@ should not silently change money fields without an explicit admin edit path.
 | Payment screenshot bytes | R2; key on `order.paymentProofKey` |
 | Menu item image bytes | R2; key on `menu_item.imageKey` |
 | Bank account display strings | `constants/payment.ts` (not DB) |
-| Min lead days (2) | `constants/payment.ts` + checkout validation |
+| Min lead days (1 = next day) | `constants/payment.ts` + checkout validation |
+| Time slots | `FULFILLMENT_SLOTS` / `FulfillmentSlot` enum |
 
 ---
 

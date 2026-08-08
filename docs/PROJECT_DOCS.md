@@ -52,12 +52,12 @@ Guest checkout flow below. No customer login.
 - Firebase Auth, Firestore, and Firebase Storage removed. Do not reintroduce.
 - Auth: Better Auth email/password for **admin only**. Sessions via cookies.
 - Customers: **guest checkout only** (no customer login).
-- Order confirmation email sent to the email from the customer form.
+- Order confirmation email sent when customer provides email (optional).
 - Data: Prisma multi-file schema under `prisma/schema/` against Neon.
   - `base.prisma` — generator + datasource
   - `auth.prisma` — Better Auth tables
   - `menu.prisma` — Category / MenuItem / MenuItemVariant
-  - `order.prisma` — Order / OrderItem + payment enums
+  - `order.prisma` — Order / OrderItem + payment + fulfillment enums
 - Files: Cloudflare R2 via S3-compatible SDK and short-lived presigned uploads.
   Payment proof screenshots + item images go to R2.
   Setup: `docs/CLOUDFLARE_STORAGE_SETUP.md`.
@@ -67,7 +67,8 @@ Guest checkout flow below. No customer login.
   `constants/payment.ts`). Guide: `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`.
   Manual path uses tesseract.js OCR assist on payment screenshots
   (`features/payments/`).
-- Delivery: collect address + notes. Delivery fee **not included**.
+- Fulfillment: pickup or delivery; earliest **next day**; slots 10–12 / 2–4 / 5–7.
+  Address required for delivery. Delivery fee **not included**.
 - Packed Meals: orderable option (from ₱120/meal) + contact phone for menu.
 - Menu seed: `bun run db:seed` — structure from June 15, 2026 list; default
   prices are **₱1–10** (Fiuu has no sandbox). Real catalog pesos:
@@ -79,11 +80,11 @@ Guest checkout flow below. No customer login.
 2. Optional: read History (how the business started).
 3. Browse menu by category.
 4. Add items with size variant (Family / Fiesta / Super / Per meal where available).
-5. Checkout: name, email, phone, delivery address, event/delivery date
-   (min **2 days** advance), notes.
-6. Pay offline via UnionBank / GCash / BPI (details below).
-7. Upload payment screenshot + submit order.
-8. Customer receives order-details email.
+5. Checkout: name, phone, optional email, pickup/delivery, date (earliest next
+   day), time slot (10–12 / 2–4 / 5–7), address if delivery, notes.
+6. Pay offline via UnionBank / GCash / BPI (details below) — or Fiuu when enabled.
+7. Upload payment screenshot + submit order (manual mode).
+8. If email given, customer receives order-details email.
 9. Admin reviews proof and confirms or rejects order.
 
 ## Admin flow (protected)
@@ -122,7 +123,8 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
 - Sizes not uniform: some items skip Family; portion text varies
   (pax / kilos / sticks / rolls / per meal).
 - Business rules from menu:
-  - Place order at least **two days** in advance.
+  - Place order at least **one day** in advance (next-day earliest). Some
+    items (e.g. Lechon) may still show a longer lead note on the item.
   - Delivery fee not included.
   - Prices subject to change.
   - Lechon Pork Belly: note two-day advance.

@@ -43,7 +43,41 @@ export type PaymentChannelId = keyof typeof PAYMENT_CHANNELS
 
 export const PAYMENT_CHANNEL_LIST = Object.values(PAYMENT_CHANNELS)
 
-/** Business rule from menu: order at least two days in advance. */
-export const ORDER_MIN_LEAD_DAYS = 2
+/**
+ * Earliest fulfillment = next calendar day (lead = 1).
+ * Some menu items (e.g. Lechon) still show a 2-day note on the item itself.
+ */
+export const ORDER_MIN_LEAD_DAYS = 1
+
+export const FULFILLMENT_SLOTS = {
+  slot_10_12: {
+    id: "slot_10_12",
+    label: "10:00–12:00",
+    shortLabel: "10-12",
+  },
+  slot_14_16: {
+    id: "slot_14_16",
+    label: "14:00–16:00",
+    shortLabel: "2-4",
+  },
+  slot_17_19: {
+    id: "slot_17_19",
+    label: "17:00–19:00",
+    shortLabel: "5-7",
+  },
+} as const
+
+export type FulfillmentSlotId = keyof typeof FULFILLMENT_SLOTS
+
+export const FULFILLMENT_SLOT_LIST = Object.values(FULFILLMENT_SLOTS)
+
+export const FULFILLMENT_TYPES = {
+  pickup: { id: "pickup", label: "Pickup" },
+  delivery: { id: "delivery", label: "Delivery" },
+} as const
+
+export type FulfillmentTypeId = keyof typeof FULFILLMENT_TYPES
+
+export const FULFILLMENT_TYPE_LIST = Object.values(FULFILLMENT_TYPES)
 
 export const PACKED_MEALS_CONTACT_PHONE = "0917-310-2345"

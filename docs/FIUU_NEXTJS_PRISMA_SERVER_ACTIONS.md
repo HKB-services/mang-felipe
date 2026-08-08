@@ -221,8 +221,8 @@ export const createFiuuPaymentAction = actionClient
 
 Notes:
 
-- Prefer creating the full order (line snapshots, customer, `eventDate`) in one
-  transaction **before** returning the Fiuu payload.
+- Prefer creating the full order (line snapshots, customer, `fulfillmentDate` /
+  slot) in one transaction **before** returning the Fiuu payload.
 - `bill_*` fields come from the Prisma order, not a second unvalidated form.
 - Wire `FIUU_*` through `config/env.ts` instead of raw `process.env` once live.
 
@@ -347,7 +347,7 @@ verification is authoritative.
 
 ## Production flow
 
-1. Guest completes cart + customer form (2-day `eventDate` rule still applies).
+1. Guest completes cart + customer form (next-day `fulfillmentDate` + slot).
 2. Server Action creates Prisma `Order` + `OrderItem` snapshots.
 3. Server Action builds Fiuu `vcode` and returns POST fields.
 4. Client auto-submits form to Fiuu hosted page.

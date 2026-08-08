@@ -1,4 +1,4 @@
-// Guest orders — customer details, line items, manual payment proof.
+// Guest orders — customer details, fulfillment slot, manual payment proof.
 
 enum OrderStatus {
   pending_review
@@ -13,19 +13,37 @@ enum PaymentChannel {
   bpi
 }
 
-model Order {
-  id        String      @id @default(cuid())
-  /// Human-readable code, e.g. HM-20260807-A1B2
-  orderNumber String    @unique
-  status    OrderStatus @default(pending_review)
+enum FulfillmentType {
+  pickup
+  delivery
+}
 
-  customerName    String
-  customerEmail   String
-  customerPhone   String
-  deliveryAddress String
+/// Local time windows (store timezone: Asia/Manila).
+enum FulfillmentSlot {
+  slot_10_12
+  slot_14_16
+  slot_17_19
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  /// Human-readable code, e.g. HM-20260807-A1B2
+  orderNumber String      @unique
+  status      OrderStatus @default(pending_review)
+
+  customerName  String
+  /// Optional — order email receipt only when present.
+  customerEmail String?
+  customerPhone String
+
+  fulfillmentType FulfillmentType
+  /// Pickup / delivery date. App enforces ≥ next calendar day.
+  fulfillmentDate DateTime
+  fulfillmentSlot FulfillmentSlot
+
+  /// Required when fulfillmentType = delivery; optional for pickup.
+  deliveryAddress String?
   deliveryNotes   String?
-  /// Event / delivery date. App enforces ≥ 2 days from now.
-  eventDate       DateTime
 
   paymentChannel         PaymentChannel
   /// R2 object key for payment screenshot.
@@ -46,7 +64,8 @@ model Order {
 
   @@index([status])
   @@index([customerEmail])
-  @@index([eventDate])
+  @@index([fulfillmentDate])
+  @@index([fulfillmentType])
   @@index([createdAt])
   @@map("order")
 }
@@ -57,7 +76,7 @@ model OrderItem {
   order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   menuItemId String?
-  menuItem   MenuItem?       @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  menuItem   MenuItem?        @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
   variantId  String?
   variant    MenuItemVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
 

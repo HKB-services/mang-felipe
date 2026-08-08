@@ -70,7 +70,7 @@ export function buildFiuuCheckoutPayload(input: {
   orderNumber: string
   subtotalPhp: number
   customerName: string
-  customerEmail: string
+  customerEmail: string | null
   customerPhone: string
 }): { paymentUrl: string; fields: FiuuCheckoutFields } {
   const { merchantId, verifyKey, payUrl } = getFiuuConfig()
@@ -92,7 +92,7 @@ export function buildFiuuCheckoutPayload(input: {
       orderid: input.orderNumber,
       currency,
       bill_name: input.customerName,
-      bill_email: input.customerEmail,
+      bill_email: input.customerEmail ?? "",
       bill_mobile: input.customerPhone,
       vcode,
     },

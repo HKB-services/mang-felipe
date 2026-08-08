@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack --port 5001",
     "build": "next build",
+    "email:dev": "email dev",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
@@ -67,9 +68,10 @@
     "nextjs-toploader": "3.9.17",
     "nuqs": "2.8.9",
     "pg": "^8.22.0",
-    "react": "19.2.4",
+    "react": "19.2.8",
     "react-day-picker": "10.0.1",
-    "react-dom": "19.2.4",
+    "react-dom": "19.2.8",
+    "react-email": "6.9.2",
     "shadcn": "4.8.0",
     "sileo": "0.1.5",
     "tailwind-merge": "3.6.0",
@@ -78,6 +80,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "@react-email/ui": "6.9.2",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "25.5.0",
     "@types/pg": "^8.20.4",

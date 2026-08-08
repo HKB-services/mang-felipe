@@ -1,5 +1,5 @@
 import React from "react"
-import AccountPage from "@/features/account/AccountPage"
+import AccountPage from "@/features/admin/account/AccountPage"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
