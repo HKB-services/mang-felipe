@@ -1,0 +1,91 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  // Gate policy (CI + pre-push): fail only on blocking findings.
+  // - dead code: unused files/exports/deps, cycles, boundary violations
+  // - duplication: copy-paste clones
+  // - health: functions above complexity/CRAP thresholds
+  // Advisory output (hotspots, refactoring targets, large functions) is
+  // informational only — use `bun run fallow:report` locally.
+  "health": {
+    "maxCyclomatic": 12,
+    "maxCognitive": 10,
+    "maxLoc": 50,
+    "maxParameters": 3,
+    "ignore": ["**/*.generated.ts", "**/app/*hidden*/**"],
+    "thresholdOverrides": [
+      {
+        "files": ["src/legacy/**"],
+        "functions": ["parseLegacy"],
+        "maxCyclomatic": 40,
+        "maxCognitive": 35,
+        "maxLoc": 250,
+        "reason": "Queued legacy parser cleanup",
+      },
+      {
+        "files": ["components/ui/**", "components/data-table/**", "hooks/**"],
+        "maxCyclomatic": 15,
+        "maxCognitive": 15,
+        "maxLoc": 100,
+        "maxCrap": 40,
+        "reason": "UI primitives and data-table hooks carry Embla/table wiring",
+      },
+      {
+        "files": ["src/components/**", "src/hooks/**"],
+        "maxCyclomatic": 15,
+        "maxCognitive": 15,
+        "maxLoc": 100,
+        "reason": "Extended allowance for complex UI rendering pipelines and hooks",
+      },
+      {
+        "files": ["features/landing/**"],
+        "maxCyclomatic": 12,
+        "maxCognitive": 10,
+        "maxLoc": 80,
+        "maxCrap": 40,
+        "reason": "Landing motion hooks and section composition",
+      },
+      {
+        "files": [
+          "features/admin/products/**",
+          "features/admin/inventory/**",
+          "features/locad/**",
+          "lib/storage/**",
+        ],
+        "maxCyclomatic": 12,
+        "maxCognitive": 12,
+        "maxLoc": 80,
+        "maxCrap": 40,
+        "reason": "New product/inventory/Locad admin surfaces with form + API wiring",
+      },
+      {
+        "files": ["components/data-table/**"],
+        "maxCyclomatic": 15,
+        "maxCognitive": 15,
+        "maxLoc": 160,
+        "reason": "Data table filters coordinate popover state, calendar modes, and URL sync",
+      },
+    ],
+  },
+  "duplicates": {
+    "threshold": 20,
+  },
+  "audit": {
+    "cacheMaxAgeDays": 0,
+    "gate": "new-only",
+  },
+  "rules": {
+    "unused-files": "error",
+    "unused-exports": "error",
+    "unused-types": "error",
+    "unused-dependencies": "error",
+    "unused-dev-dependencies": "warn",
+    "unused-enum-members": "error",
+    "unused-class-members": "error",
+    "unresolved-imports": "error",
+    "unlisted-dependencies": "error",
+    "duplicate-exports": "error",
+    "circular-dependencies": "error",
+    "boundary-violation": "error",
+    "coverage-gaps": "off",
+  },
+}
