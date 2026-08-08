@@ -310,7 +310,9 @@ should not silently change money fields without an explicit admin edit path.
 ## Seed and migrations
 
 - Migrations: `prisma/migrations/`
-- Seed (June 15, 2026 price list): `prisma/seed.ts`
+- Seed: `prisma/seed.ts` (menu structure from June 15, 2026 list).
+  Default seed prices are **₱1–10** for Fiuu live testing (no sandbox).
+  Catalog prices: `SEED_REAL_PRICES=true` / `bun run db:seed:real`.
 - Commands:
   - `bun run db:generate`
   - `bun run db:migrate`

@@ -67,7 +67,9 @@ Guest checkout flow below. No customer login.
   Guide: `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`.
 - Delivery: collect address + notes. Delivery fee **not included**.
 - Packed Meals: orderable option (from ₱120/meal) + contact phone for menu.
-- Menu seed: `bun run db:seed` (June 15, 2026 price list).
+- Menu seed: `bun run db:seed` — structure from June 15, 2026 list; default
+  prices are **₱1–10** (Fiuu has no sandbox). Real catalog pesos:
+  `bun run db:seed:real` (`SEED_REAL_PRICES=true`).
 
 ## Customer flow (public)
 

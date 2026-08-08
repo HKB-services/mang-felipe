@@ -1,12 +1,34 @@
 /**
- * Seed Happy Moments menu (as of June 15, 2026 price list).
- * Run: bun run db:seed  OR  prisma migrate with seed configured.
+ * Seed Happy Moments menu (structure from June 15, 2026 price list).
+ *
+ * Default prices are ₱1–10 test amounts — Fiuu has no sandbox, so live
+ * gateway checks must stay cheap. Catalog (real) pesos stay in the MENU
+ * literals for reference; set `SEED_REAL_PRICES=true` to seed those instead.
+ *
+ * Run: `bun run db:seed` (loads `.env.development` via prisma.config when
+ * using migrate seed, or pass `PRISMA_ENV_FILE=.env.development`).
  */
-import "dotenv/config"
+import { existsSync } from "node:fs"
+import { resolve } from "node:path"
+import { config as loadEnv } from "dotenv"
 import { PrismaClient } from "../generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { Pool } from "pg"
 import { PACKED_MEALS_CONTACT_PHONE } from "../constants/payment"
+
+for (const file of [
+  process.env.PRISMA_ENV_FILE,
+  ".env",
+  ".env.local",
+  ".env.development",
+]) {
+  if (!file) continue
+  const path = resolve(process.cwd(), file)
+  if (existsSync(path)) {
+    loadEnv({ path, override: false })
+    if (process.env.DATABASE_URL) break
+  }
+}
 
 type VariantSeed = {
   sizeKey: string
@@ -34,24 +56,48 @@ type CategorySeed = {
   items: ItemSeed[]
 }
 
+/** Fiuu live-test band (₱1–10). */
+const TEST_PRICE_BY_SIZE: Record<string, number> = {
+  family: 2,
+  fiesta: 5,
+  super: 8,
+  unit: 1,
+}
+
+const useRealPrices = process.env.SEED_REAL_PRICES === "true"
+
+function resolveSeedPrice(sizeKey: string, catalogPricePhp: number): number {
+  if (useRealPrices) return catalogPricePhp
+  const base = TEST_PRICE_BY_SIZE[sizeKey] ?? 1
+  // Slight variety inside 1–10 from catalog digits, still cheap for Fiuu.
+  const bump = catalogPricePhp % 3
+  return Math.min(10, Math.max(1, base + bump))
+}
+
 function v(
   sizeKey: string,
   label: string,
   portionLabel: string,
-  pricePhp: number,
+  catalogPricePhp: number,
   sortOrder: number
 ): VariantSeed {
-  return { sizeKey, label, portionLabel, pricePhp, sortOrder }
+  return {
+    sizeKey,
+    label,
+    portionLabel,
+    pricePhp: resolveSeedPrice(sizeKey, catalogPricePhp),
+    sortOrder,
+  }
 }
 
-const family = (portion: string, price: number) =>
-  v("family", "Family", portion, price, 1)
-const fiesta = (portion: string, price: number) =>
-  v("fiesta", "Fiesta", portion, price, 2)
-const superSize = (portion: string, price: number) =>
-  v("super", "Super", portion, price, 3)
-const unit = (portion: string, price: number) =>
-  v("unit", "Per meal", portion, price, 1)
+const family = (portion: string, catalogPricePhp: number) =>
+  v("family", "Family", portion, catalogPricePhp, 1)
+const fiesta = (portion: string, catalogPricePhp: number) =>
+  v("fiesta", "Fiesta", portion, catalogPricePhp, 2)
+const superSize = (portion: string, catalogPricePhp: number) =>
+  v("super", "Super", portion, catalogPricePhp, 3)
+const unit = (portion: string, catalogPricePhp: number) =>
+  v("unit", "Per meal", portion, catalogPricePhp, 1)
 
 const PANSIT_PORTIONS = {
   family: "Up to 8 pax",
@@ -530,7 +576,11 @@ async function main() {
       }
     }
 
-    console.log(`Seeded ${MENU.length} categories with menu items.`)
+    console.log(
+      `Seeded ${MENU.length} categories with menu items (${
+        useRealPrices ? "catalog (real) prices" : "Fiuu test prices ₱1–10"
+      }).`
+    )
   } finally {
     await prisma.$disconnect()
     await pool.end()

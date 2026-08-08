@@ -21,7 +21,10 @@
     "db:migrate:deploy:dev": "PRISMA_ENV_FILE=.env.development prisma migrate deploy",
     "db:migrate:deploy:prod": "PRISMA_ENV_FILE=.env.production prisma migrate deploy",
     "db:push": "prisma db push",
-    "db:seed": "bun run prisma/seed.ts",
+    "db:seed": "PRISMA_ENV_FILE=.env.development bun run prisma/seed.ts",
+    "db:seed:real": "PRISMA_ENV_FILE=.env.development SEED_REAL_PRICES=true bun run prisma/seed.ts",
+    "db:seed:prod": "PRISMA_ENV_FILE=.env.production bun run prisma/seed.ts",
+    "db:seed:prod:real": "PRISMA_ENV_FILE=.env.production SEED_REAL_PRICES=true bun run prisma/seed.ts",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"
   },
