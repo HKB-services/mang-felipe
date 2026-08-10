@@ -6,6 +6,7 @@ import { Toaster as SileoToaster } from "sileo"
 import AppProviders from "@/providers/AppProviders"
 import NextTopLoader from "nextjs-toploader"
 import { Metadata } from "next"
+import APP_DETAILS from "@/constants/app.details"
 const notoSans = Noto_Sans({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
@@ -14,8 +15,11 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "FXP PDF Generator",
-  description: "FXP PDF Generator",
+  title: APP_DETAILS.name,
+  description: APP_DETAILS.description,
+  icons: {
+    icon: APP_DETAILS.logo,
+  },
 }
 
 export default function RootLayout({

@@ -80,4 +80,9 @@ export type FulfillmentTypeId = keyof typeof FULFILLMENT_TYPES
 
 export const FULFILLMENT_TYPE_LIST = Object.values(FULFILLMENT_TYPES)
 
-export const PACKED_MEALS_CONTACT_PHONE = "0917-310-2345"
+export {
+  PACKED_MEALS_CONTACT_PHONE,
+  SHOP_CONTACT,
+  SHOP_PRIMARY_PHONE,
+} from "./contact"
+

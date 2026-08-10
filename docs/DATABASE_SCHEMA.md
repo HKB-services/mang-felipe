@@ -10,7 +10,7 @@ Stack rules: `docs/TECHNOLOGY_STACK.md`.
 
 | Who | What |
 | --- | --- |
-| Customer (guest) | Home + History + browse menu, pick size/qty, checkout with delivery details, pay offline, upload payment screenshot. Receives order email. No login. |
+| Customer (guest) | Home + History + Order + Track (order number + phone). Browse menu, checkout, pay offline, upload proof. Optional email receipt. No login. |
 | Admin | Login via Better Auth. CRUD menu. Review orders and payment proofs. Confirm / reject / edit. |
 
 **Parent business:** Happy Moments Food Corporation.
@@ -23,8 +23,9 @@ Stack rules: `docs/TECHNOLOGY_STACK.md`.
 | Raken Rolls | Sister line (Lumpia, Turon, atbp.) — shown on Home + History |
 | Oh My Bilao! | Sister bilao/party line — shown on Home + History |
 
-Logo reference: `public/branding/brand-logos.png`. Product page scope:
-`docs/PROJECT_DOCS.md` (Home, History, Order form).
+Logo reference: `public/branding/brand-logos.png`. Public pages:
+`docs/LANDING.md` (Home, History, navbar, footer) + Track
+(`features/track-order/track-order.docs.md`) + Order form.
 
 **Not in scope for the schema:** inventory/stock, online payment gateway (FIUU later), customer accounts, delivery-fee calculation, CMS tables for History copy (static page first).
 
@@ -43,6 +44,11 @@ Logo reference: `public/branding/brand-logos.png`. Product page scope:
 5. Menu categories may be *presented* under sister-brand flavor in UI
    (rolls → Raken Rolls, bilao packs → Oh My Bilao!), but catalog rows stay
    `Category` / `MenuItem` / `MenuItemVariant` only.
+6. **Track order** is a public lookup (`orderNumber` + `customerPhone`).
+   Admin may set `lalamoveTrackingUrl` (manual Lalamove share link); app emails
+   the customer when `customerEmail` is set. No new tables for v1.
+   Do not expose `paymentProofKey` or `adminNotes` on the guest track path;
+   **do** expose `lalamoveTrackingUrl` to the matching guest.
 
 ### Menu
 
@@ -61,7 +67,8 @@ Logo reference: `public/branding/brand-logos.png`. Product page scope:
 9. Optional `imageKey` stores an R2 object key, not a public CDN URL.
 10. **No inventory fields.** Availability is admin-controlled (`isActive`), not stock qty.
 11. Packed Meals is a normal orderable category. Seed starts at ₱120 per meal;
-    contact phone for special menu stays in app constants / category description.
+    contact for special menu stays in `constants/contact.ts` (`SHOP_CONTACT`) /
+    category description.
 
 ### Ordering
 
@@ -260,6 +267,9 @@ Unique: `(menuItemId, sizeKey)`.
 | fulfillmentSlot | FulfillmentSlot | 10–12 / 14–16 / 17–19 |
 | deliveryAddress | String? | Required when `delivery` |
 | deliveryNotes | String? | |
+| lalamoveTrackingUrl | String? | Admin-pasted Lalamove share URL |
+| lalamoveTrackingSavedAt | DateTime? | When URL last saved |
+| lalamoveTrackingEmailedAt | DateTime? | When link email last sent |
 | paymentChannel | PaymentChannel | |
 | paymentProofKey | String? | R2 key |
 | paymentProofUploadedAt | DateTime? | |

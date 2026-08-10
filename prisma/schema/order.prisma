@@ -45,6 +45,12 @@ model Order {
   deliveryAddress String?
   deliveryNotes   String?
 
+  /// Admin-pasted Lalamove share / tracking URL (delivery). Not GPS of our own.
+  lalamoveTrackingUrl     String?
+  lalamoveTrackingSavedAt DateTime?
+  /// When tracking-link email was last sent to customerEmail (if any).
+  lalamoveTrackingEmailedAt DateTime?
+
   paymentChannel         PaymentChannel
   /// R2 object key for payment screenshot.
   paymentProofKey        String?

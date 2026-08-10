@@ -9,6 +9,11 @@ menu CRUD and order confirmation. No inventory. FIUU payment portal later
 
 Primary public brand for this app: **Mang Felipe**.
 
+Pitch (`constants/app.details.ts` → `APP_DETAILS.description`): freshly prepared
+meals with carefully selected quality ingredients for customers across Metro
+Manila, Cavite, and Laguna since 2020. Orders: Viber +63 0917 310 2345
+(`SHOP_CONTACT.viberDisplay`).
+
 ## Brands / logos
 
 Three circular logos under Happy Moments Food Corporation. Reference image:
@@ -25,12 +30,16 @@ tell the full business story. Do not invent a fourth brand mark.
 
 ## Public pages
 
-### Home
+Canonical landing / nav / footer / track rules: `docs/LANDING.md`.
+
+### Home (landing)
 
 - Brand-first first viewport: Mang Felipe as the dominant identity.
 - Short pitch + CTA into the order form / menu.
+- Secondary CTA: Track order.
 - Introduce the three brands (Mang Felipe primary; Raken Rolls + Oh My Bilao!
   as related lines under Happy Moments Food Corporation).
+- Shared public **navbar** + **footer** (see `docs/LANDING.md`).
 
 ### History (how the business started)
 
@@ -42,12 +51,21 @@ tell the full business story. Do not invent a fourth brand mark.
 
 ### Order form (customer)
 
-Guest checkout flow below. No customer login.
+Guest checkout flow below. No customer login. Route: `/order`.
+
+### Track order (customer)
+
+Guest lookup at `/track` by **order number + phone** (no login). Shows status,
+fulfillment window, and — when admin pasted it — the **Lalamove tracking URL**.
+Owner flow: paste Lalamove link on order → save to DB → email customer (if
+email on order). Not our own GPS map.
+Feature docs: `features/track-order/track-order.docs.md`.
 
 ## Current decisions
 
 - Locked stack: see `docs/TECHNOLOGY_STACK.md`.
 - Business + DB logic: see `docs/DATABASE_SCHEMA.md`.
+- Landing + public chrome: see `docs/LANDING.md`.
 - Feature-based architecture under `features/`. Auth feature is reference shape.
 - Firebase Auth, Firestore, and Firebase Storage removed. Do not reintroduce.
 - Auth: Better Auth email/password for **admin only**. Sessions via cookies.
@@ -69,7 +87,9 @@ Guest checkout flow below. No customer login.
   (`features/payments/`).
 - Fulfillment: pickup or delivery; earliest **next day**; slots 10–12 / 2–4 / 5–7.
   Address required for delivery. Delivery fee **not included**.
-- Packed Meals: orderable option (from ₱120/meal) + contact phone for menu.
+- Packed Meals: orderable option (from ₱120/meal). Contact:
+  `mangfelipekitchen@gmail.com`, `0917 310 2345`, `0998 302 4209`
+  (`constants/contact.ts` → `SHOP_CONTACT`).
 - Menu seed: `bun run db:seed` — structure from June 15, 2026 list; default
   prices are **₱1–10** (Fiuu has no sandbox). Real catalog pesos:
   `bun run db:seed:real` (`SEED_REAL_PRICES=true`).
@@ -78,20 +98,25 @@ Guest checkout flow below. No customer login.
 
 1. Land on Home (Mang Felipe primary; sister brands visible).
 2. Optional: read History (how the business started).
-3. Browse menu by category.
+3. Browse menu / Order form by category.
 4. Add items with size variant (Family / Fiesta / Super / Per meal where available).
 5. Checkout: name, phone, optional email, pickup/delivery, date (earliest next
    day), time slot (10–12 / 2–4 / 5–7), address if delivery, notes.
 6. Pay offline via UnionBank / GCash / BPI (details below) — or Fiuu when enabled.
 7. Upload payment screenshot + submit order (manual mode).
-8. If email given, customer receives order-details email.
+8. If email given, customer receives order-details email (includes order number).
 9. Admin reviews proof and confirms or rejects order.
+10. Customer can **Track order** at `/track` with order number + phone.
+11. When rider is booked, admin pastes Lalamove link → saved on order → emailed
+    to customer (if email given); also visible on `/track`.
 
 ## Admin flow (protected)
 
 - CRUD food categories and items (name, category, notes, active flag).
 - CRUD size variants per item (label, portion text, price PHP).
 - List/filter orders; view line items + payment proof; confirm / reject / edit.
+- Paste **Lalamove tracking URL** on a delivery order → save → email customer
+  when `customerEmail` is present.
 
 ## Manual payment channels
 
@@ -128,7 +153,8 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
   - Delivery fee not included.
   - Prices subject to change.
   - Lechon Pork Belly: note two-day advance.
-  - Packed meals: orderable from ₱120; call/message 0917-310-2345 for options.
+  - Packed meals: orderable from ₱120; call/message `0917 310 2345` or
+    `0998 302 4209`, or email `mangfelipekitchen@gmail.com`.
 
 ## Out of scope (for now)
 

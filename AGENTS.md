@@ -5,6 +5,8 @@
 Read `docs/PROJECT_DOCS.md` first for product scope and current decisions.
 Read `docs/TECHNOLOGY_STACK.md` before changing infrastructure, data, auth,
 storage, or deployment.
+Read `docs/LANDING.md` before changing public Home, History, navbar, footer,
+or Track order.
 
 ## Setup
 
