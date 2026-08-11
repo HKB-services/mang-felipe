@@ -20,12 +20,15 @@ import {
 } from "@/components/ui/sheet"
 import { PUBLIC_NAV_LINKS } from "../utils/public-nav"
 import { HERO_BG_CLASS } from "../utils/hero-theme"
+import { CartSummary } from "@/features/orders/components/CartSummary"
+import { useOrderCart } from "@/features/orders/hooks/use-order-cart"
 
 const LandingNavbar = () => {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { count } = useOrderCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -73,10 +76,12 @@ const LandingNavbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Open cart"
+            className="relative"
+            aria-label={`Open cart${count ? `, ${count} items` : ""}`}
             onClick={() => setCartOpen(true)}
           >
             <IconShoppingBag className="size-5 text-primary" />
+            {count ? <span className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-[#b44c35] text-[10px] text-white">{count > 99 ? "99+" : count}</span> : null}
           </Button>
           <Button
             render={<Link href={ROUTES.ORDER} />}
@@ -92,10 +97,12 @@ const LandingNavbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Open cart"
+            className="relative"
+            aria-label={`Open cart${count ? `, ${count} items` : ""}`}
             onClick={() => setCartOpen(true)}
           >
             <IconShoppingBag className="size-5 text-primary" />
+            {count ? <span className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-[#b44c35] text-[10px] text-white">{count > 99 ? "99+" : count}</span> : null}
           </Button>
 
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -150,20 +157,7 @@ const LandingNavbar = () => {
           <SheetHeader>
             <SheetTitle>Cart</SheetTitle>
           </SheetHeader>
-          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 text-center">
-            <IconShoppingBag className="size-10 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              Your cart is empty. Add meals from the menu to get started.
-            </p>
-          </div>
-          <SheetFooter>
-            <Button
-              render={<Link href={ROUTES.ORDER} onClick={() => setCartOpen(false)} />}
-              nativeButton={false}
-            >
-              Browse menu
-            </Button>
-          </SheetFooter>
+          <div className="flex flex-1 flex-col px-4"><CartSummary compact /></div>
         </SheetContent>
       </Sheet>
     </header>

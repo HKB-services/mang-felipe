@@ -78,7 +78,7 @@ const FeaturedItemsSection = async () => {
             return (
               <Link
                 key={item.id}
-                href={ROUTES.ORDER}
+                href={`${ROUTES.ORDER}/${item.slug}`}
                 className="featured-item-card group overflow-hidden rounded-[1.5rem] border border-[#103d2d]/15 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#103d2d] dark:border-white/15 dark:focus-visible:outline-white"
               >
                 <span className="relative block aspect-[4/3] overflow-hidden">

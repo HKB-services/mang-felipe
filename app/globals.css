@@ -5,6 +5,19 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Mang Felipe public commerce palette: banana paper, forest leaf, ember. */
+  --mf-canvas: #f7f4ef;
+  --mf-surface: #ffffff;
+  --mf-panel: #e9f0e8;
+  --mf-ink: #103d2d;
+  --mf-muted: #51675d;
+  --mf-border: rgb(16 61 45 / 0.14);
+  --mf-hero: #103d2d;
+  --mf-hero-ink: #ffffff;
+  --mf-accent: #b44c35;
+  --mf-gold: #f2bd65;
+  --mf-notice: #fff5dc;
+  --mf-notice-ink: #754d0d;
   --background: oklch(1 0 0);
   --foreground: oklch(0.1448 0 0);
   --card: oklch(1 0 0);
@@ -61,6 +74,18 @@
 }
 
 .dark {
+  --mf-canvas: #071f17;
+  --mf-surface: #102b20;
+  --mf-panel: #16382a;
+  --mf-ink: #f7f2e8;
+  --mf-muted: #b6c9be;
+  --mf-border: rgb(230 244 235 / 0.16);
+  --mf-hero: #092a1e;
+  --mf-hero-ink: #f7f2e8;
+  --mf-accent: #f09a78;
+  --mf-gold: #f2bd65;
+  --mf-notice: #3d3013;
+  --mf-notice-ink: #ffe4a1;
   --background: oklch(0.1408 0.0044 285.8229);
   --foreground: oklch(0.9851 0 0);
   --card: oklch(0.1408 0.0044 285.8229);
@@ -189,6 +214,112 @@
   html {
     @apply font-sans;
   }
+}
+
+.mf-canvas {
+  background-color: var(--mf-canvas);
+  background-image:
+    radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--mf-gold) 13%, transparent), transparent 34rem),
+    linear-gradient(130deg, color-mix(in oklab, var(--mf-hero) 3%, transparent) 1px, transparent 1px);
+  background-size: auto, 24px 24px;
+}
+
+.mf-surface {
+  background-color: var(--mf-surface);
+  border-color: var(--mf-border);
+}
+
+.mf-ink { color: var(--mf-ink); }
+.mf-muted { color: var(--mf-muted); }
+.mf-accent { color: var(--mf-accent); }
+.mf-hero { background-color: var(--mf-hero); color: var(--mf-hero-ink); }
+.mf-notice { background-color: var(--mf-notice); color: var(--mf-notice-ink); }
+
+/* Legacy utility colors inside commerce screens resolve through same palette. */
+.dark .mf-canvas [data-slot="card"],
+.dark .mf-canvas .mf-surface,
+.dark [data-slot="sheet-content"] .mf-surface {
+  background-color: var(--mf-surface);
+  border-color: var(--mf-border);
+}
+
+.dark .mf-canvas .bg-white,
+.dark [data-slot="sheet-content"] .bg-white {
+  background-color: var(--mf-surface);
+}
+
+.dark .mf-canvas .bg-\[\#e5eee8\] {
+  background-color: var(--mf-panel);
+}
+
+.dark .mf-canvas .bg-emerald-50 {
+  background-color: var(--mf-panel);
+}
+
+.dark .mf-canvas .bg-\[\#fff5dc\],
+.dark .mf-canvas .bg-\[\#fff9ea\] {
+  background-color: var(--mf-notice);
+}
+
+.dark .mf-canvas [class*="text-[#103d2d]"],
+.dark [data-slot="sheet-content"] [class*="text-[#103d2d]"] {
+  color: var(--mf-ink) !important;
+}
+
+.dark .mf-canvas [class*="text-[#b44c35]"],
+.dark [data-slot="sheet-content"] [class*="text-[#b44c35]"] {
+  color: var(--mf-accent) !important;
+}
+
+.dark .mf-canvas [class*="text-[#754d0d]"],
+.dark .mf-canvas [class*="text-[#51380e]"] {
+  color: var(--mf-notice-ink) !important;
+}
+
+.dark .mf-canvas .border-emerald-950\/10,
+.dark .mf-canvas .border-emerald-950\/15,
+.dark .mf-canvas .border-\[\#d5b26c\],
+.dark [data-slot="sheet-content"] .border-emerald-950\/10 {
+  border-color: var(--mf-border);
+}
+
+.dark .mf-canvas [data-slot="input"],
+.dark .mf-canvas [data-slot="textarea"],
+.dark .mf-canvas [data-slot="select-trigger"] {
+  background-color: color-mix(in oklab, var(--mf-canvas) 78%, black);
+  border-color: color-mix(in oklab, var(--mf-ink) 24%, transparent);
+  color: var(--mf-ink);
+}
+
+.dark .mf-canvas [data-slot="input"]::placeholder,
+.dark .mf-canvas [data-slot="textarea"]::placeholder {
+  color: var(--mf-muted);
+}
+
+.dark .mf-canvas [data-slot="button"].bg-background {
+  background-color: var(--mf-panel);
+  border-color: color-mix(in oklab, var(--mf-ink) 34%, transparent);
+  color: var(--mf-ink);
+}
+
+.dark .mf-canvas [data-slot="button"].bg-background:hover,
+.dark .mf-canvas [data-slot="button"].bg-background[aria-expanded="true"] {
+  background-color: var(--mf-panel);
+}
+
+.dark .checkout-calendar {
+  background-color: var(--mf-surface);
+  border-color: var(--mf-border);
+}
+
+.dark .checkout-calendar [data-slot="calendar"] {
+  background-color: var(--mf-surface);
+  color: var(--mf-ink);
+}
+
+.dark .mf-canvas [data-slot="attachment"] {
+  background-color: var(--mf-panel);
+  border-color: color-mix(in oklab, var(--mf-ink) 28%, transparent);
 }
 
 /* HowItWorksSection: stitched catering-order path, inspired by banana-leaf tray weaving. */

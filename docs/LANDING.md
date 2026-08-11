@@ -25,7 +25,9 @@ Product scope: `docs/PROJECT_DOCS.md`. Stack: `docs/TECHNOLOGY_STACK.md`.
 | `/` | Home (landing) | `features/landing/` |
 | `/history` | History / how we started | `features/landing/` |
 | `/contact` | Contact / locations + maps | `features/landing/` |
-| `/order` | Menu + guest checkout | `features/orders/` |
+| `/order` | Menu catalog | `features/orders/` |
+| `/order/[slug]` | Product detail | `features/orders/` |
+| `/order/checkout` | Guest checkout | `features/orders/` |
 | `/track` | Track your order / delivery | `features/track-order/` |
 | `/orders/[orderNumber]` | Post-submit / thank-you status | `features/orders/` |
 

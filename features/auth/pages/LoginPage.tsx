@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { EmailFormField } from "@/features/auth/components/EmailFormField"
 import { stringFieldProps } from "@/lib/form-utils"
 import { ROUTES } from "@/constants"
+import { APP_DETAILS } from "@/constants/app.details"
 import { AuthFormCard } from "@/features/auth/components/AuthFormCard"
 import { useExpiredSessionHandler } from "@/features/auth/hooks/use-expired-session-handler"
 import { useLoginForm } from "@/features/auth/hooks/use-login-form"
@@ -18,7 +19,7 @@ const LoginPage = () => {
   return (
     <AuthFormCard
       title="Welcome back"
-      description="Sign in to Firebase Starter to continue"
+      description={`Sign in to ${APP_DETAILS.name} to continue`}
       headerClassName="text-center"
       onSubmit={() => form.handleSubmit()}
     >

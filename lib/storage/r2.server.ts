@@ -1,6 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3"
@@ -79,6 +80,21 @@ export async function createPresignedDownloadUrl(key: string) {
   })
 
   return { downloadUrl, expiresIn: DOWNLOAD_URL_EXPIRES_IN }
+}
+
+/** Server-side existence check used before persisting an uploaded object key. */
+export async function objectExists(key: string) {
+  try {
+    await getR2Client().send(
+      new HeadObjectCommand({
+        Bucket: env.R2_BUCKET,
+        Key: key,
+      })
+    )
+    return true
+  } catch {
+    return false
+  }
 }
 
 export async function deleteObject(key: string) {
