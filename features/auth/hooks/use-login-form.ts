@@ -32,7 +32,7 @@ export function useLoginForm() {
         sileo.success({ title: data.message })
         setUserAuth(data?.user as UserWithoutPassword)
         form.reset()
-        router.replace(ROUTES.HOME)
+        router.replace(ROUTES.DASHBOARD)
       } else {
         sileo.error({ title: data?.message ?? "Login failed" })
       }
