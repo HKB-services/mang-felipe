@@ -1,11 +1,11 @@
-import type { ReactNode } from "react"
-import { Button } from "react-email"
-import { emailFontStack, emailTokens } from "@/emails/tokens"
+import type { ReactNode } from "react";
+import { Button } from "react-email";
+import { emailFontStack, emailTokens } from "@/emails/tokens";
 
 type EmailButtonProps = {
-  href: string
-  children: ReactNode
-}
+  href: string;
+  children: ReactNode;
+};
 
 export function EmailButton({ href, children }: EmailButtonProps) {
   return (
@@ -14,7 +14,7 @@ export function EmailButton({ href, children }: EmailButtonProps) {
       style={{
         backgroundColor: emailTokens.accent,
         borderRadius: "6px",
-        color: emailTokens.heroInk,
+        color: "#ffffff",
         display: "inline-block",
         fontFamily: emailFontStack,
         fontSize: "15px",
@@ -26,5 +26,5 @@ export function EmailButton({ href, children }: EmailButtonProps) {
     >
       {children}
     </Button>
-  )
+  );
 }

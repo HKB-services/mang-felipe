@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   IconArrowLeft,
@@ -12,6 +12,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react"
 import { sileo } from "sileo"
+import { useBreadcrumbLabels } from "@/features/sidebar/BreadcrumbLabelContext"
 import {
   Attachment,
   AttachmentContent,
@@ -77,9 +78,14 @@ async function fetchItem(itemId: string) {
 
 export default function AdminItemDetail({ itemId }: { itemId: string }) {
   const queryClient = useQueryClient()
+  const { setLabel } = useBreadcrumbLabels()
   const [editingVariant, setEditingVariant] = useState<Variant | null | undefined>(undefined)
   const query = useQuery({ queryKey: itemQueryKey(itemId), queryFn: () => fetchItem(itemId) })
   const refresh = () => queryClient.invalidateQueries({ queryKey: itemQueryKey(itemId) })
+
+  useEffect(() => {
+    if (query.data) setLabel(itemId, query.data.name)
+  }, [itemId, query.data, setLabel])
 
   const reorderMutation = useMutation({
     mutationFn: async (ids: string[]) => {

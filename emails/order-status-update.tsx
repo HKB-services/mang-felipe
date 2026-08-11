@@ -4,33 +4,34 @@ import { EmailNotice } from "@/emails/components/EmailNotice";
 import { EmailShell } from "@/emails/components/EmailShell";
 import { emailFontStack, emailTokens } from "@/emails/tokens";
 
-export type OrderReceiptEmailProps = {
+export type OrderStatusUpdateEmailProps = {
   orderNumber: string;
   customerName: string;
-  subtotal: string;
+  statusLabel: string;
+  statusMessage: string;
   fulfillmentSummary: string;
   trackUrl: string;
-  orderUrl: string;
 };
 
-export function OrderReceiptEmail({
+export function OrderStatusUpdateEmail({
   orderNumber,
   customerName,
-  subtotal,
+  statusLabel,
+  statusMessage,
   fulfillmentSummary,
   trackUrl,
-  orderUrl,
-}: OrderReceiptEmailProps) {
-  const firstName = customerName.trim().split(/\s+/)[0] ?? "there";
+}: OrderStatusUpdateEmailProps) {
+  const firstName = customerName.trim().split(/\s+/)[0] || "there";
 
   return (
-    <EmailShell preview={`We received your Mang Felipe order ${orderNumber}.`}>
+    <EmailShell
+      preview={`Mang Felipe order ${orderNumber} is now ${statusLabel.toLowerCase()}.`}
+    >
       <Heading as="h1" style={heading}>
-        We received your order
+        Order status updated
       </Heading>
       <Text style={bodyText}>
-        Hi {firstName}, your payment proof was uploaded and your order is now
-        waiting for shop review.
+        Hi {firstName}, your Mang Felipe order status changed.
       </Text>
 
       <Section style={codeBox}>
@@ -38,13 +39,10 @@ export function OrderReceiptEmail({
         <Text style={orderCode}>{orderNumber}</Text>
       </Section>
 
-      <EmailNotice>
-        Payment proof received. Mang Felipe will review your payment and order
-        details before confirmation.
-      </EmailNotice>
+      <EmailNotice>{statusMessage}</EmailNotice>
 
       <Section style={summaryBox}>
-        <SummaryRow label="Food subtotal" value={subtotal} />
+        <SummaryRow label="Status" value={statusLabel} />
         <SummaryRow label="Fulfillment" value={fulfillmentSummary} />
       </Section>
 
@@ -53,11 +51,11 @@ export function OrderReceiptEmail({
       </Section>
 
       <Text style={bodyText}>
-        You can also{" "}
-        <Link href={orderUrl} style={link}>
-          view your order summary
-        </Link>
-        . Keep your order number handy.
+        You can also open{" "}
+        <Link href={trackUrl} style={link}>
+          Track order
+        </Link>{" "}
+        anytime with your order number and mobile number.
       </Text>
     </EmailShell>
   );
@@ -76,18 +74,19 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-const previewProps: OrderReceiptEmailProps = {
+const previewProps: OrderStatusUpdateEmailProps = {
   customerName: "Juan dela Cruz",
-  fulfillmentSummary: "Pickup · Wednesday, August 12, 2026 · 10:00-12:00",
+  fulfillmentSummary: "Delivery · Wednesday, August 12, 2026 · 10:00-12:00",
   orderNumber: "HM-20260812-ABCD",
-  orderUrl: "https://example.com/orders/HM-20260812-ABCD",
-  subtotal: "PHP 2,400",
+  statusLabel: "Confirmed",
+  statusMessage:
+    "Good news — your order is confirmed. Please keep your order number handy.",
   trackUrl: "https://example.com/track?order=HM-20260812-ABCD",
 };
 
-OrderReceiptEmail.PreviewProps = previewProps;
+OrderStatusUpdateEmail.PreviewProps = previewProps;
 
-export default OrderReceiptEmail;
+export default OrderStatusUpdateEmail;
 
 const heading = {
   color: emailTokens.ink,

@@ -7,13 +7,14 @@ Auth: `features/auth/auth.docs.md`.
 Schema: `docs/DATABASE_SCHEMA.md`.
 Lalamove / guest track: `features/track-order/track-order.docs.md`.
 
-**Status:** docs first; implement screens later. Partial: account/security pages,
-order detail + Lalamove form, user search helpers.
+**Status:** account/security, dashboard summary, order list/detail, order row
+actions, Lalamove form, menu hub/detail, and user search helpers exist.
 
 ## Responsibilities
 
 - Ops dashboard (pending / upcoming summary).
-- Order list + detail: payment proof review, confirm / reject / cancel, notes.
+- Order list + detail: payment proof review, confirm / reject / cancel, notes,
+  and status-update customer email when an order has `customerEmail`.
 - Paste Lalamove tracking URL on delivery orders (save + optional email).
 - Menu CRUD: categories, items, variants, images, soft-hide; later `isFeatured`.
 - Account / security screens for the logged-in admin.
@@ -33,10 +34,13 @@ features/admin/
     server/
   orders/
     pages/
-      AdminOrdersList.tsx      # planned
-      AdminOrderDetail.tsx     # partial (exists)
-    actions/                  # planned review / list
-  menu/                       # planned
+      AdminOrdersList.tsx
+      AdminOrderDetail.tsx
+      AdminOrderRowActions.tsx
+    actions/
+      admin-list-orders.action.ts
+      update-order-status.action.ts
+  menu/
     pages/
     actions/
 ```
@@ -49,12 +53,12 @@ Source: `features/sidebar/sidebar-nav.config.ts`.
 
 Planned groups:
 
-| Group | Items |
-| --- | --- |
-| Overview | Dashboard |
-| Orders | All orders (filter pending by default optional) |
-| Menu | Categories / items hub |
-| (dev) | Test UI |
+| Group    | Items                                           |
+| -------- | ----------------------------------------------- |
+| Overview | Dashboard                                       |
+| Orders   | All orders (filter pending by default optional) |
+| Menu     | Categories / items hub                          |
+| (dev)    | Test UI                                         |
 
 Account + Security stay in user menu footer, not primary nav pills.
 
@@ -67,6 +71,9 @@ Account + Security stay in user menu footer, not primary nav pills.
 ## Notes
 
 - No inventory.
-- Payment proof: admin-only signed R2 read; never on public track/receipt.
+- Payment proof: admin-only signed R2 image preview + OCR hints; never on public
+  track/receipt.
+- Status updates: use `updateOrderStatusAction`; email failure returns
+  `emailWarning` but does not undo the status write.
 - Sister brands are not DB menu brands — UI flavor only.
 - Featured Home flag: `MenuItem.isFeatured` (planned in schema docs).

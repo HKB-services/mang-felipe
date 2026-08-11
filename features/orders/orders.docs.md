@@ -5,11 +5,11 @@ Guest menu, cart, checkout, post-submit receipt. Admin review lives under
 
 ## Public routes
 
-| Route | Role |
-| --- | --- |
-| `/order` | Active menu catalog, keyword/category/price filters, sorting, product cards |
-| `/order/[slug]` | Product page: image, notes, portions, add to cart |
-| `/order/checkout` | Guest details, fulfillment, manual payment proof, submit |
+| Route                   | Role                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| `/order`                | Active menu catalog, keyword/category/price filters, sorting, product cards     |
+| `/order/[slug]`         | Product page: image, notes, portions, add to cart                               |
+| `/order/checkout`       | Guest details, fulfillment, manual payment proof, submit                        |
 | `/orders/[orderNumber]` | Public-safe post-submit receipt; no customer details, proof key, or admin notes |
 
 ## Cart
@@ -40,18 +40,18 @@ replaces the file. OCR hints are assistive only. They never confirm payment.
 
 Zod: `features/orders/schema/order-checkout.schema.ts`
 
-| Field | Required | Notes |
-| --- | --- | --- |
-| `customerName` | yes | |
-| `customerPhone` | yes | |
-| `customerEmail` | no | Receipt email when set via `emails/order-receipt.tsx` |
-| `fulfillmentType` | yes | `pickup` \| `delivery` |
-| `fulfillmentDate` | yes | Earliest = next day (`ORDER_MIN_LEAD_DAYS = 1`) |
-| `fulfillmentSlot` | yes | `10-12` / `2-4` / `5-7` |
-| `deliveryAddress` | if delivery | |
-| `deliveryNotes` | no | |
-| `paymentChannel` | yes | Manual channels |
-| `items[]` | ≥1 | `variantId`, `quantity` |
+| Field             | Required    | Notes                                                         |
+| ----------------- | ----------- | ------------------------------------------------------------- |
+| `customerName`    | yes         |                                                               |
+| `customerPhone`   | yes         |                                                               |
+| `customerEmail`   | no          | Receipt, status-update, and delivery-tracking emails when set |
+| `fulfillmentType` | yes         | `pickup` \| `delivery`                                        |
+| `fulfillmentDate` | yes         | Earliest = next day (`ORDER_MIN_LEAD_DAYS = 1`)               |
+| `fulfillmentSlot` | yes         | `10-12` / `2-4` / `5-7`                                       |
+| `deliveryAddress` | if delivery |                                                               |
+| `deliveryNotes`   | no          |                                                               |
+| `paymentChannel`  | yes         | Manual channels                                               |
+| `items[]`         | ≥1          | `variantId`, `quantity`                                       |
 
 Slot labels: `FULFILLMENT_SLOTS` in `constants/payment.ts`.
 

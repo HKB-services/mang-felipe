@@ -7,21 +7,9 @@ import { Badge } from "@/components/ui/badge"
 import { ROUTES } from "@/constants/app.routes"
 import { FULFILLMENT_SLOTS, FULFILLMENT_TYPES, PAYMENT_CHANNELS } from "@/constants/payment"
 import { formatFulfillmentDate, formatPhp } from "@/features/orders/utils/format"
+import { AdminOrderRowActions } from "./AdminOrderRowActions"
+import { orderStatusLabel, orderStatusVariant } from "../utils/order-status"
 import type { AdminOrderListItem } from "../server/admin-list-orders"
-
-const statusLabel = {
-  pending_review: "Pending review",
-  confirmed: "Confirmed",
-  rejected: "Rejected",
-  cancelled: "Cancelled",
-} as const
-
-const statusVariant = {
-  pending_review: "outline",
-  confirmed: "default",
-  rejected: "destructive",
-  cancelled: "secondary",
-} as const
 
 export const orderColumns: Array<ColumnDef<AdminOrderListItem>> = [
   {
@@ -67,12 +55,12 @@ export const orderColumns: Array<ColumnDef<AdminOrderListItem>> = [
     ),
     cell: ({ row }) => {
       const status = row.original.status
-      return <Badge variant={statusVariant[status]}>{statusLabel[status]}</Badge>
+      return <Badge variant={orderStatusVariant[status]}>{orderStatusLabel[status]}</Badge>
     },
     meta: {
       label: "Status",
       variant: "multiSelect",
-      options: Object.entries(statusLabel).map(([value, label]) => ({ value, label })),
+      options: Object.entries(orderStatusLabel).map(([value, label]) => ({ value, label })),
     },
   },
   {
@@ -133,5 +121,11 @@ export const orderColumns: Array<ColumnDef<AdminOrderListItem>> = [
     cell: ({ row }) => (
       <span className="font-medium tabular-nums">{formatPhp(row.original.subtotalPhp)}</span>
     ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    header: () => <span className="sr-only">Actions</span>,
+    cell: ({ row }) => <AdminOrderRowActions order={row.original} />,
   },
 ]

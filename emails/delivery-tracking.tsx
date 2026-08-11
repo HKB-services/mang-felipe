@@ -1,19 +1,17 @@
-import { Column, Heading, Link, Row, Section, Text } from "react-email"
-import { EmailButton } from "@/emails/components/EmailButton"
-import { EmailNotice } from "@/emails/components/EmailNotice"
-import { EmailShell } from "@/emails/components/EmailShell"
-import { emailFontStack, emailTokens } from "@/emails/tokens"
+import { Column, Heading, Link, Row, Section, Text } from "react-email";
+import { EmailButton } from "@/emails/components/EmailButton";
+import { EmailNotice } from "@/emails/components/EmailNotice";
+import { EmailShell } from "@/emails/components/EmailShell";
+import { emailFontStack, emailTokens } from "@/emails/tokens";
 
 export type DeliveryTrackingEmailProps = {
-  logoUrl: string
-  orderNumber: string
-  fulfillmentSummary: string
-  lalamoveTrackingUrl: string
-  trackUrl: string
-}
+  orderNumber: string;
+  fulfillmentSummary: string;
+  lalamoveTrackingUrl: string;
+  trackUrl: string;
+};
 
 export function DeliveryTrackingEmail({
-  logoUrl,
   orderNumber,
   fulfillmentSummary,
   lalamoveTrackingUrl,
@@ -21,7 +19,6 @@ export function DeliveryTrackingEmail({
 }: DeliveryTrackingEmailProps) {
   return (
     <EmailShell
-      logoUrl={logoUrl}
       preview={`Delivery tracking is ready for Mang Felipe order ${orderNumber}.`}
     >
       <Heading as="h1" style={heading}>
@@ -56,7 +53,7 @@ export function DeliveryTrackingEmail({
         .
       </Text>
     </EmailShell>
-  )
+  );
 }
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
@@ -69,20 +66,19 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
         <Text style={summaryValue}>{value}</Text>
       </Column>
     </Row>
-  )
+  );
 }
 
 const previewProps: DeliveryTrackingEmailProps = {
   fulfillmentSummary: "Wednesday, August 12, 2026 · 10:00-12:00",
   lalamoveTrackingUrl: "https://www.lalamove.com/",
-  logoUrl: "https://example.com/logo/mang-felipe.jpg",
   orderNumber: "HM-20260812-ABCD",
   trackUrl: "https://example.com/track?order=HM-20260812-ABCD",
-}
+};
 
-DeliveryTrackingEmail.PreviewProps = previewProps
+DeliveryTrackingEmail.PreviewProps = previewProps;
 
-export default DeliveryTrackingEmail
+export default DeliveryTrackingEmail;
 
 const heading = {
   color: emailTokens.ink,
@@ -91,7 +87,7 @@ const heading = {
   fontWeight: 800,
   lineHeight: "32px",
   margin: "0 0 14px",
-}
+};
 
 const bodyText = {
   color: emailTokens.ink,
@@ -99,18 +95,18 @@ const bodyText = {
   fontSize: "15px",
   lineHeight: "24px",
   margin: "14px 0 0",
-}
+};
 
 const summaryBox = {
   border: `1px solid ${emailTokens.border}`,
   borderRadius: "8px",
   margin: "22px 0 0",
   overflow: "hidden",
-}
+};
 
 const summaryRow = {
   borderBottom: `1px solid ${emailTokens.border}`,
-}
+};
 
 const summaryLabel = {
   color: emailTokens.muted,
@@ -119,7 +115,7 @@ const summaryLabel = {
   lineHeight: "20px",
   margin: "0",
   padding: "12px 14px",
-}
+};
 
 const summaryValue = {
   color: emailTokens.ink,
@@ -129,10 +125,10 @@ const summaryValue = {
   lineHeight: "20px",
   margin: "0",
   padding: "12px 14px",
-}
+};
 
 const link = {
   color: emailTokens.accent,
   fontWeight: 700,
   textDecoration: "underline",
-}
+};

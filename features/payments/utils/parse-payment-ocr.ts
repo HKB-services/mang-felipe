@@ -22,7 +22,8 @@ const AMOUNT_PATTERNS = [
 ]
 
 const REFERENCE_PATTERNS = [
-  /(?:ref(?:erence)?(?:\s*(?:no|number|#))?|txn(?:\s*id)?|transaction(?:\s*(?:id|no))?|trace(?:\s*no)?)\s*[:\-]?\s*([A-Z0-9\-]+)/i,
+  /(?:ref(?:erence)?|transaction|trace)\s*(?:no\.?|number|#|id)?\s*[:\-]?\s*([A-Z0-9\-]+)/i,
+  /(?:txn|tx)\s*(?:id|no\.?|number|#)?\s*[:\-]?\s*([A-Z0-9\-]+)/i,
 ]
 
 const CHANNEL_HINTS: Array<{ id: PaymentChannelId; needles: string[] }> = [

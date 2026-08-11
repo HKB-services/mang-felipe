@@ -20,11 +20,11 @@ Three brands under Happy Moments Food Corporation. Data:
 `constants/sister-brands.ts` (`SISTER_BRANDS`, `BRAND_FAMILY`). Combined strip:
 `public/branding/brand-logos.png`.
 
-| Brand | Role | Look / pitch |
-| --- | --- | --- |
-| **Mang Felipe** | **Main app brand** (home, header, primary identity) | Forest green; catering trays · see `APP_DETAILS` |
-| **Rak en Rolls** | Sister snack line | Red · “Lumpia, Turon & More” · merienda rolls/pastries · La Huerta Parañaque · IG `@rakenrollsph` · 0995 017 6288 · rakenrollsph@gmail.com |
-| **Oh My Bilao!** | Sister bilao / party line | Coral · “Party Bilao Specialists” · bilao trays · La Huerta Parañaque · 0998 302 4209 · mangfelipekitchen@gmail.com |
+| Brand            | Role                                                | Look / pitch                                                                                                                               |
+| ---------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Mang Felipe**  | **Main app brand** (home, header, primary identity) | Forest green; catering trays · see `APP_DETAILS`                                                                                           |
+| **Rak en Rolls** | Sister snack line                                   | Red · “Lumpia, Turon & More” · merienda rolls/pastries · La Huerta Parañaque · IG `@rakenrollsph` · 0995 017 6288 · rakenrollsph@gmail.com |
+| **Oh My Bilao!** | Sister bilao / party line                           | Coral · “Party Bilao Specialists” · bilao trays · La Huerta Parañaque · 0998 302 4209 · mangfelipekitchen@gmail.com                        |
 
 Use Mang Felipe as the hero/nav mark. Show all three on Home and History to
 tell the full business story. Do not invent a fourth brand mark.
@@ -63,8 +63,9 @@ locally and is re-priced server-side at submit.
 
 Guest lookup at `/track` by **order number + phone** (no login). Shows status,
 fulfillment window, and — when admin pasted it — the **Lalamove tracking URL**.
-Owner flow: paste Lalamove link on order → save to DB → email customer (if
-email on order). Not our own GPS map.
+Owner flow: update order status → email customer when `customerEmail` exists;
+paste Lalamove link on order → save to DB → email customer (if email on order).
+Not our own GPS map.
 Feature docs: `features/track-order/track-order.docs.md`.
 
 ### Contact (customer)
@@ -84,7 +85,8 @@ shares JP Rizal with Oh My Bilao! until owner confirms a separate pin.
 - Firebase Auth, Firestore, and Firebase Storage removed. Do not reintroduce.
 - Auth: Better Auth email/password for **admin only**. Sessions via cookies.
 - Customers: **guest checkout only** (no customer login).
-- Order confirmation email sent when customer provides email (optional).
+- Order receipt, admin status-update, and delivery-tracking emails send when
+  customer provides email (optional).
 - Data: Prisma multi-file schema under `prisma/schema/` against Neon.
   - `base.prisma` — generator + datasource
   - `auth.prisma` — Better Auth tables
@@ -119,7 +121,8 @@ shares JP Rizal with Oh My Bilao! until owner confirms a separate pin.
 6. Pay offline via UnionBank / GCash / BPI (details below) — or Fiuu when enabled.
 7. Upload payment screenshot + submit order (manual mode).
 8. If email given, customer receives order-details email (includes order number).
-9. Admin reviews proof and confirms or rejects order.
+9. Admin reviews proof and confirms or rejects order; status update is emailed
+   when email was provided.
 10. Customer can **Track order** at `/track` with order number + phone.
 11. When rider is booked, admin pastes Lalamove link → saved on order → emailed
     to customer (if email given); also visible on `/track`.
@@ -145,7 +148,7 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
 
 ### GCASH
 
-- Account name: JON RO**K F.
+- Account name: JON RO\*\*K F.
 - GCash Number: 0905-745 6950
 
 ### BPI
@@ -161,7 +164,7 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
   - Mang Felipe → core catering trays (pansit, meats, seafood, veggies, rice, …)
   - Rak en Rolls → Lumpia / Dynamite / Turon style rolls
   - Oh My Bilao! → Halo-Halo Bilao / Party Bilao packs
-  Contact/place details: `constants/sister-brands.ts`.
+    Contact/place details: `constants/sister-brands.ts`.
 - Sizes not uniform: some items skip Family; portion text varies
   (pax / kilos / sticks / rolls / per meal).
 - Business rules from menu:

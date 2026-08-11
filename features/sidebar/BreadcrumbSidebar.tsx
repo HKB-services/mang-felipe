@@ -19,6 +19,8 @@ const ROUTE_LABEL_MAP: Record<string, string> = {
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+/** Prisma's default `cuid()`: a lowercase `c` followed by ~24 base36 chars. */
+const CUID_RE = /^c[a-z0-9]{20,}$/i
 
 const formatSegmentLabel = (segment: string) =>
   segment
@@ -43,7 +45,7 @@ const BreadcrumbSidebar = () => {
     const label =
       ROUTE_LABEL_MAP[href] ??
       labels.get(segment) ??
-      (UUID_RE.test(segment) ? "…" : formatSegmentLabel(segment))
+      (UUID_RE.test(segment) || CUID_RE.test(segment) ? "…" : formatSegmentLabel(segment))
 
     return { href, isLast, label }
   })

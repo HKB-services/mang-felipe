@@ -25,13 +25,13 @@ Track / Lalamove guest side: `features/track-order/track-order.docs.md`.
 
 ## Who can access
 
-| Rule | Detail |
-| --- | --- |
-| Auth | Better Auth email/password; cookie sessions |
-| Gate | `app/(protected)/layout.tsx` + proxy cookie check; mutations via `authActionClient` |
-| Roles | `user.roles` includes app role (e.g. `admin`) — check on protected actions |
-| Bootstrap | Hidden `/register-admin` for first admin only (`ROUTES.REGISTER_ADMIN`) |
-| Public chrome | No Login / Admin in public navbar (`docs/LANDING.md`) |
+| Rule          | Detail                                                                              |
+| ------------- | ----------------------------------------------------------------------------------- |
+| Auth          | Better Auth email/password; cookie sessions                                         |
+| Gate          | `app/(protected)/layout.tsx` + proxy cookie check; mutations via `authActionClient` |
+| Roles         | `user.roles` includes app role (e.g. `admin`) — check on protected actions          |
+| Bootstrap     | Hidden `/register-admin` for first admin only (`ROUTES.REGISTER_ADMIN`)             |
+| Public chrome | No Login / Admin in public navbar (`docs/LANDING.md`)                               |
 
 Login: `/login`. After session: sidebar shell under `app/(protected)/`.
 
@@ -39,11 +39,11 @@ Login: `/login`. After session: sidebar shell under `app/(protected)/`.
 
 ## Shell
 
-| Piece | Location |
-| --- | --- |
-| Layout | `app/(protected)/layout.tsx` — session redirect, sidebar, breadcrumb, theme |
-| Sidebar | `features/sidebar/` (`AppSidebar`, `sidebar-nav.config.ts`) |
-| Account / Security | `/account`, `/security` (profile + password) |
+| Piece              | Location                                                                    |
+| ------------------ | --------------------------------------------------------------------------- |
+| Layout             | `app/(protected)/layout.tsx` — session redirect, sidebar, breadcrumb, theme |
+| Sidebar            | `features/sidebar/` (`AppSidebar`, `sidebar-nav.config.ts`)                 |
+| Account / Security | `/account`, `/security` (profile + password)                                |
 
 Sidebar should grow nav groups as screens land (see Routes). Keep Test UI
 dev-only.
@@ -55,19 +55,19 @@ dev-only.
 Wire into `constants/app.routes.ts` + `PROTECTED_ROUTES` when building pages.
 Existing stubs noted.
 
-| Route | Page | Notes |
-| --- | --- | --- |
-| `/login` | Login | Public auth |
-| `/dashboard` | Ops overview | Stub today |
-| `/admin` | Redirect → dashboard | Exists |
-| `/admin/orders` | Order list | Planned |
-| `/admin/orders/[id]` | Order detail | Partial: detail + Lalamove form exists |
-| `/admin/menu` | Category list / hub | Planned |
-| `/admin/menu/categories/[id]` | Category edit + items | Planned |
-| `/admin/menu/items/[id]` | Item + variants + image | Planned |
-| `/account` | Profile | Exists |
-| `/security` | Password | Exists |
-| `/register-admin` | Hidden bootstrap | Exists under `app/(hidden)/` |
+| Route                         | Page                    | Notes                                        |
+| ----------------------------- | ----------------------- | -------------------------------------------- |
+| `/login`                      | Login                   | Public auth                                  |
+| `/dashboard`                  | Ops overview            | Stub today                                   |
+| `/admin`                      | Redirect → dashboard    | Exists                                       |
+| `/admin/orders`               | Order list              | Exists: filters, row actions, status updates |
+| `/admin/orders/[id]`          | Order detail            | Exists: detail + Lalamove form               |
+| `/admin/menu`                 | Category list / hub     | Planned                                      |
+| `/admin/menu/categories/[id]` | Category edit + items   | Planned                                      |
+| `/admin/menu/items/[id]`      | Item + variants + image | Planned                                      |
+| `/account`                    | Profile                 | Exists                                       |
+| `/security`                   | Password                | Exists                                       |
+| `/register-admin`             | Hidden bootstrap        | Exists under `app/(hidden)/`                 |
 
 Optional later: `/admin/users` only if multi-admin management is needed.
 
@@ -81,33 +81,34 @@ Suggested route keys: `ADMIN_ORDERS`, `ADMIN_ORDER_DETAIL`, `ADMIN_MENU`, …
 
 One job: “what needs attention.”
 
-| Block | Content |
-| --- | --- |
-| Pending count | Orders with `status = pending_review` |
-| Upcoming | Confirmed orders by `fulfillmentDate` (next few days) |
-| Shortcuts | Orders needing review · Menu · (optional) Track help copy |
+| Block         | Content                                                   |
+| ------------- | --------------------------------------------------------- |
+| Pending count | Orders with `status = pending_review`                     |
+| Upcoming      | Confirmed orders by `fulfillmentDate` (next few days)     |
+| Shortcuts     | Orders needing review · Menu · (optional) Track help copy |
 
 No marketing chrome. No inventory widgets.
 
 ### 2. Orders list (`/admin/orders`)
 
-| Capability | Detail |
-| --- | --- |
-| List | Newest first; show order number, name, phone, status, channel, fulfillment date/slot, subtotal |
-| Filters | Status, fulfillment type, date range, payment channel; text search on order number / phone / name |
-| Open | Row → `/admin/orders/[id]` |
+| Capability | Detail                                                                                                               |
+| ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| List       | Newest first; show order number, name, phone, status, channel, fulfillment date/slot, subtotal                       |
+| Filters    | Status, fulfillment type, date range, payment channel; text search on order number / phone / name                    |
+| Open       | Row → `/admin/orders/[id]`                                                                                           |
+| Actions    | Dropdown menu: view, update status, delete as `cancelled`; status changes email customer when `customerEmail` exists |
 
 ### 3. Order detail (`/admin/orders/[id]`)
 
-| Block | Content |
-| --- | --- |
-| Header | Order number, status badge, created time |
-| Customer | Name, phone, email (if any) |
-| Fulfillment | Pickup/delivery, date, slot, address + delivery notes |
-| Lines | Snapshotted name / variant / qty / line totals |
-| Payment | Channel label + **payment proof** (signed R2 read URL for admin only) |
-| Review | Confirm / Reject / Cancel + optional `adminNotes` |
-| Lalamove | Delivery only: paste URL → save → email if `customerEmail` set |
+| Block       | Content                                                                                         |
+| ----------- | ----------------------------------------------------------------------------------------------- |
+| Header      | Order number, status badge, created time                                                        |
+| Customer    | Name, phone, email (if any)                                                                     |
+| Fulfillment | Pickup/delivery, date, slot, address + delivery notes                                           |
+| Lines       | Snapshotted name / variant / qty / line totals                                                  |
+| Payment     | Channel label, **payment proof image** (signed R2 read URL for admin only), OCR extracted hints |
+| Review      | Confirm / Reject / Cancel + optional `adminNotes`                                               |
+| Lalamove    | Delivery only: paste URL → save → email if `customerEmail` set                                  |
 
 **Review rules**
 
@@ -115,22 +116,24 @@ No marketing chrome. No inventory widgets.
 2. Confirm → `confirmed` + `reviewedAt` + `reviewedByUserId`.
 3. Reject → `rejected` + notes encouraged (bad proof, unavailable item, …).
 4. Cancel → `cancelled` (shop or customer request after submit).
-5. Prefer soft outcomes over delete. Do not hard-delete orders with money/proof.
-6. Confirmed money fields should not change silently — explicit edit path if needed.
-7. Never expose `paymentProofKey` or `adminNotes` on public track/receipt routes.
+5. Status changes send a customer email when `customerEmail` exists; order
+   update still succeeds if email delivery fails, and admin sees warning.
+6. Prefer soft outcomes over delete. Do not hard-delete orders with money/proof.
+7. Confirmed money fields should not change silently — explicit edit path if needed.
+8. Never expose `paymentProofKey` or `adminNotes` on public track/receipt routes.
 
 **Lalamove:** full rules in `features/track-order/track-order.docs.md`.
 Admin action uses `authActionClient`; validate `z.url()` (https).
 
 ### 4. Menu hub (`/admin/menu`)
 
-| Capability | Detail |
-| --- | --- |
-| Categories | List with sortOrder, active flag; create / rename / reorder / soft-hide |
-| Items | Per category: name, slug, description, notes, code, sortOrder, `isActive`, image |
-| Variants | Per item: sizeKey, label, portionLabel, pricePhp, sortOrder, `isActive` |
-| Featured | Toggle `isFeatured` when schema lands (Home section; see `docs/LANDING.md`) |
-| Images | Upload to R2; store `imageKey` only |
+| Capability | Detail                                                                           |
+| ---------- | -------------------------------------------------------------------------------- |
+| Categories | List with sortOrder, active flag; create / rename / reorder / soft-hide          |
+| Items      | Per category: name, slug, description, notes, code, sortOrder, `isActive`, image |
+| Variants   | Per item: sizeKey, label, portionLabel, pricePhp, sortOrder, `isActive`          |
+| Featured   | Toggle `isFeatured` when schema lands (Home section; see `docs/LANDING.md`)      |
+| Images     | Upload to R2; store `imageKey` only                                              |
 
 Prefer deactivate (`isActive = false`) over hard delete when orders reference
 the item. Category delete cascades items/variants — use carefully or block when
@@ -149,8 +152,8 @@ Already in scope via auth feature: profile fields, change password
 ## Admin order of operations (happy path)
 
 1. Guest submits order (manual pay + proof) → `pending_review`.
-2. Admin opens Orders → pending → opens detail → checks proof (OCR assist is
-   guest-side only; admin eyes confirm).
+2. Admin opens Orders → pending → opens detail → checks proof image and OCR
+   hints. Admin eyes confirm; OCR never auto-confirms payment.
 3. Confirm or reject (+ notes).
 4. For delivery: book rider in Lalamove (outside app) → paste share URL → save
    → email when email present.
@@ -160,14 +163,14 @@ Already in scope via auth feature: profile fields, change password
 
 ## Authorization checklist
 
-| Surface | Client | Notes |
-| --- | --- | --- |
-| List / mutate orders | `authActionClient` | Role check |
-| Menu CRUD | `authActionClient` | Role check |
-| Save Lalamove URL | `authActionClient` | Role check |
-| Guest track lookup | `actionClient` | Public; safe fields only |
-| Guest checkout | `actionClient` | Public |
-| Proof read URL | Admin-only signed URL | Never on public routes |
+| Surface              | Client                | Notes                    |
+| -------------------- | --------------------- | ------------------------ |
+| List / mutate orders | `authActionClient`    | Role check               |
+| Menu CRUD            | `authActionClient`    | Role check               |
+| Save Lalamove URL    | `authActionClient`    | Role check               |
+| Guest track lookup   | `actionClient`        | Public; safe fields only |
+| Guest checkout       | `actionClient`        | Public                   |
+| Proof read URL       | Admin-only signed URL | Never on public routes   |
 
 Keep Prisma / R2 / Better Auth secrets server-side only.
 
@@ -175,12 +178,12 @@ Keep Prisma / R2 / Better Auth secrets server-side only.
 
 ## Data touchpoints
 
-| Domain | Models / fields |
-| --- | --- |
-| Menu | `Category`, `MenuItem`, `MenuItemVariant` (+ planned `MenuItem.isFeatured`) |
-| Orders | `Order`, `OrderItem`; statuses; `paymentProofKey`; review fields |
+| Domain   | Models / fields                                                               |
+| -------- | ----------------------------------------------------------------------------- |
+| Menu     | `Category`, `MenuItem`, `MenuItemVariant` (+ planned `MenuItem.isFeatured`)   |
+| Orders   | `Order`, `OrderItem`; statuses; `paymentProofKey`; review fields              |
 | Tracking | `lalamoveTrackingUrl`, `lalamoveTrackingSavedAt`, `lalamoveTrackingEmailedAt` |
-| Auth | `User.roles`, Session via Better Auth |
+| Auth     | `User.roles`, Session via Better Auth                                         |
 
 Seed / prices: `docs/PROJECT_DOCS.md` + `bun run db:seed`.
 
@@ -196,11 +199,12 @@ features/admin/
   users/                   # schemas + search helpers today
   orders/
     pages/
-      AdminOrdersList.tsx   # planned
-      AdminOrderDetail.tsx  # partial
+      AdminOrdersList.tsx
+      AdminOrderDetail.tsx
+      AdminOrderRowActions.tsx
     actions/
-      review-order.action.ts
-      list-orders.action.ts   # or server loaders
+      admin-list-orders.action.ts
+      update-order-status.action.ts
   menu/
     pages/
       AdminManageMenu.tsx

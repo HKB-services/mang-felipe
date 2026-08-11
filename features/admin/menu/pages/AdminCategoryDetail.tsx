@@ -3,10 +3,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { IconArrowLeft, IconChevronRight, IconPlus, IconStar, IconToolsKitchen2, IconTrash } from "@tabler/icons-react"
 import { sileo } from "sileo"
+import { useBreadcrumbLabels } from "@/features/sidebar/BreadcrumbLabelContext"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
@@ -43,8 +44,13 @@ async function fetchCategory(categoryId: string) {
 export default function AdminCategoryDetail({ categoryId }: { categoryId: string }) {
   const router = useRouter()
   const queryClient = useQueryClient()
+  const { setLabel } = useBreadcrumbLabels()
   const [adding, setAdding] = useState(false)
   const query = useQuery({ queryKey: categoryQueryKey(categoryId), queryFn: () => fetchCategory(categoryId) })
+
+  useEffect(() => {
+    if (query.data) setLabel(categoryId, query.data.name)
+  }, [categoryId, query.data, setLabel])
 
   const refresh = () => queryClient.invalidateQueries({ queryKey: categoryQueryKey(categoryId) })
   const openDish = (dishId: string) => router.push(`/admin/menu/items/${dishId}`)

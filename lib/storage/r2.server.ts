@@ -82,6 +82,22 @@ export async function createPresignedDownloadUrl(key: string) {
   return { downloadUrl, expiresIn: DOWNLOAD_URL_EXPIRES_IN }
 }
 
+export async function getObjectBytes(key: string) {
+  const response = await getR2Client().send(
+    new GetObjectCommand({
+      Bucket: env.R2_BUCKET,
+      Key: key,
+    })
+  )
+  const bytes = await response.Body?.transformToByteArray()
+  if (!bytes) throw new Error("Object has no body")
+
+  return {
+    bytes,
+    contentType: response.ContentType ?? "application/octet-stream",
+  }
+}
+
 /** Server-side existence check used before persisting an uploaded object key. */
 export async function objectExists(key: string) {
   try {

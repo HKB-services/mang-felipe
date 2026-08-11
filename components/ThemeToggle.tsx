@@ -8,13 +8,7 @@ import { cn } from "@/lib/utils";
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const id = React.useId();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isLight = mounted && resolvedTheme === "light";
+  const isLight = resolvedTheme === "light";
 
   return (
     <label
@@ -29,28 +23,28 @@ export function ThemeToggle() {
         className="peer h-0 w-0 opacity-0"
         checked={isLight}
         onChange={() => setTheme(isLight ? "dark" : "light")}
-        disabled={!mounted}
+        suppressHydrationWarning
       />
       <span
         className={cn(
           "absolute inset-0 cursor-pointer overflow-hidden rounded-[30px] bg-[#2a2a2a] transition-[background-color] duration-[0.4s]",
           "before:absolute before:bottom-[0.5em] before:left-[0.5em] before:h-[1.2em] before:w-[1.2em] before:rounded-[20px]",
-          "before:shadow-[inset_8px_-4px_0px_0px_#fff] before:transition-all before:duration-[0.4s]",
+          "before:shadow-[inset_8px_-4px_0px_0px_#fff] before:transition-[box-shadow,transform] before:duration-[0.4s]",
           "before:[transition-timing-function:cubic-bezier(0.81,-0.04,0.38,1.5)]",
           "peer-checked:bg-primary",
           "peer-checked:before:translate-x-[1.8em]",
           "peer-checked:before:shadow-[inset_15px_-4px_0px_15px_#ffcf48]",
           "peer-checked:[&_.theme-star]:opacity-0",
           "peer-checked:[&_.theme-cloud]:opacity-100",
-          "peer-focus-visible:outline-none peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50"
+          "peer-focus-visible:ring-ring/50 peer-focus-visible:ring-3 peer-focus-visible:outline-none",
         )}
       >
-        <span className="theme-star absolute top-[0.5em] left-[2.5em] size-[2.5px] rounded-full bg-white transition-all duration-[0.4s]" />
-        <span className="theme-star absolute top-[1.2em] left-[2.2em] size-[2.5px] rounded-full bg-white transition-all duration-[0.4s]" />
-        <span className="theme-star absolute top-[0.9em] left-[3em] size-[2.5px] rounded-full bg-white transition-all duration-[0.4s]" />
+        <span className="theme-star absolute top-[0.5em] left-[2.5em] size-[2.5px] rounded-full bg-white transition-opacity duration-[0.4s]" />
+        <span className="theme-star absolute top-[1.2em] left-[2.2em] size-[2.5px] rounded-full bg-white transition-opacity duration-[0.4s]" />
+        <span className="theme-star absolute top-[0.9em] left-[3em] size-[2.5px] rounded-full bg-white transition-opacity duration-[0.4s]" />
         <svg
           viewBox="0 0 16 16"
-          className="theme-cloud absolute -bottom-[1.4em] -left-[1.1em] w-[3.5em] opacity-0 transition-all duration-[0.4s]"
+          className="theme-cloud absolute -bottom-[1.4em] -left-[1.1em] w-[3.5em] opacity-0 transition-opacity duration-[0.4s]"
           aria-hidden
         >
           <path

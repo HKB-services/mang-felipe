@@ -1,9 +1,15 @@
 import { notFound } from "next/navigation"
+import { BackButton } from "@/components/BackButton"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { prisma } from "@/lib/prisma"
+import { resolveObjectReadUrl } from "@/lib/storage/r2.server"
 import { FULFILLMENT_SLOTS, FULFILLMENT_TYPES, PAYMENT_CHANNELS } from "@/constants/payment"
 import { formatFulfillmentDate, formatPhp } from "@/features/orders/utils/format"
 import { LalamoveTrackingForm } from "@/features/orders/components/LalamoveTrackingForm"
+import { AdminOrderBreadcrumbLabel } from "../components/AdminOrderBreadcrumbLabel"
+import { AdminPaymentProofReview } from "../components/AdminPaymentProofReview"
+import { orderStatusLabel, orderStatusVariant } from "../utils/order-status"
 
 export default async function AdminOrderDetail({ orderId }: { orderId: string }) {
   const order = await prisma.order.findUnique({
@@ -20,10 +26,13 @@ export default async function AdminOrderDetail({ orderId }: { orderId: string })
       fulfillmentSlot: true,
       deliveryAddress: true,
       paymentChannel: true,
+      paymentProofKey: true,
+      paymentProofUploadedAt: true,
       subtotalPhp: true,
       lalamoveTrackingUrl: true,
       items: {
         select: {
+          id: true,
           itemName: true,
           variantLabel: true,
           quantity: true,
@@ -34,13 +43,28 @@ export default async function AdminOrderDetail({ orderId }: { orderId: string })
   })
 
   if (!order) notFound()
+  const paymentProofUrl = order.paymentProofKey
+    ? await resolveObjectReadUrl(order.paymentProofKey).catch(() => null)
+    : null
 
   return (
     <div className="flex w-full flex-col gap-6">
+      <AdminOrderBreadcrumbLabel orderId={order.id} orderNumber={order.orderNumber} />
+      <BackButton
+        path="/admin/orders"
+        variant="ghost"
+        label="Back to orders"
+        className="text-muted-foreground"
+      />
       <Card>
         <CardHeader>
           <CardTitle>Order {order.orderNumber}</CardTitle>
-          <p className="text-sm text-muted-foreground">Status: {order.status}</p>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Status:</span>
+            <Badge variant={orderStatusVariant[order.status]}>
+              {orderStatusLabel[order.status]}
+            </Badge>
+          </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-5">
           <div className="grid gap-3 sm:grid-cols-2">
@@ -73,8 +97,8 @@ export default async function AdminOrderDetail({ orderId }: { orderId: string })
               Items
             </p>
             <ul className="flex flex-col gap-1 text-sm">
-              {order.items.map((item, index) => (
-                <li key={index} className="flex justify-between gap-4">
+              {order.items.map((item) => (
+                <li key={item.id} className="flex justify-between gap-4">
                   <span>
                     {item.itemName} ({item.variantLabel}) × {item.quantity}
                   </span>
@@ -92,6 +116,16 @@ export default async function AdminOrderDetail({ orderId }: { orderId: string })
           </div>
         </CardContent>
       </Card>
+
+      <AdminPaymentProofReview
+        expectedSubtotalPhp={order.subtotalPhp}
+        paymentChannel={order.paymentChannel}
+        proofOcrUrl={
+          order.paymentProofKey ? `/admin/orders/${order.id}/proof-image` : null
+        }
+        proofUrl={paymentProofUrl}
+        uploadedAt={order.paymentProofUploadedAt?.toISOString() ?? null}
+      />
 
       <Card>
         <CardHeader>

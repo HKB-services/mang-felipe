@@ -16,8 +16,9 @@ export function LalamoveTrackingForm({
   currentUrl: string | null
   hasCustomerEmail: boolean
 }) {
-  const { form, loading } = useLalamoveTrackingForm({ orderId, currentUrl })
-  const canResend = Boolean(currentUrl) && hasCustomerEmail
+  const { form, loading, savedUrl } = useLalamoveTrackingForm({ orderId, currentUrl })
+  const canResend = Boolean(savedUrl) && hasCustomerEmail
+  const willEmailOnFirstSave = !savedUrl && hasCustomerEmail
 
   return (
     <form action={() => form.handleSubmit()} className="flex flex-col gap-4">
@@ -32,24 +33,31 @@ export function LalamoveTrackingForm({
         )}
       </form.Field>
 
-      <form.Field name="resendEmail">
-        {(field) => (
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id={field.name}
-              checked={field.state.value}
-              disabled={!canResend}
-              onCheckedChange={(checked) => field.handleChange(checked === true)}
-            />
-            <Label htmlFor={field.name} className="font-normal">
-              Re-send tracking email to customer
-            </Label>
-          </div>
-        )}
-      </form.Field>
+      {savedUrl && (
+        <form.Field name="resendEmail">
+          {(field) => (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id={field.name}
+                checked={field.state.value}
+                disabled={!canResend}
+                onCheckedChange={(checked) => field.handleChange(checked === true)}
+              />
+              <Label htmlFor={field.name} className="font-normal">
+                Re-send tracking email to customer
+              </Label>
+            </div>
+          )}
+        </form.Field>
+      )}
+      {willEmailOnFirstSave && (
+        <p className="text-xs text-muted-foreground">
+          Customer will be emailed automatically after the first tracking link save.
+        </p>
+      )}
       {!hasCustomerEmail && (
         <p className="text-xs text-muted-foreground">
-          No email on file for this order — customer will not be emailed.
+          No email on file for this order, customer will not be emailed.
         </p>
       )}
 
