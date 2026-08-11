@@ -53,9 +53,11 @@ Canonical landing / nav / footer / track rules: `docs/LANDING.md`.
 - Keep marketing copy editable later; for v1 static content in the feature is
   fine unless owner supplies a CMS need.
 
-### Order form (customer)
+### Ordering (customer)
 
-Guest checkout flow below. No customer login. Route: `/order`.
+Guest menu catalog at `/order`, product detail at `/order/[slug]`, and guest
+checkout at `/order/checkout`. No customer login. The browser cart persists
+locally and is re-priced server-side at submit.
 
 ### Track order (customer)
 
