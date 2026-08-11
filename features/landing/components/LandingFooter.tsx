@@ -37,7 +37,7 @@ const LandingFooter = () => {
             Sister brands
           </div>
           <p className="mt-3 text-sm text-white/90">
-            Raken Rolls · Oh My Bilao!
+            Rak en Rolls · Oh My Bilao!
           </p>
         </div>
 

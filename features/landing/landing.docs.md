@@ -43,7 +43,8 @@ Primary CTA in nav/hero: Order. Secondary: Track.
 ## Notes
 
 - Mang Felipe only in navbar brand slot.
-- Sister brands on Home body + footer, not nav pills.
+- Sister brands on Home body + footer, not nav pills. Data:
+  `SISTER_BRANDS` / `BRAND_FAMILY` in `constants/sister-brands.ts`.
 - No admin links in public chrome.
 - Brand pitch: `APP_DETAILS` in `constants/app.details.ts` (Metro Manila,
   Cavite, Laguna since 2020).

@@ -37,15 +37,36 @@ Public shell layout: `app/(public)/layout.tsx` wraps navbar + footer + children.
 
 ## Brands
 
-Source image: `public/branding/brand-logos.png`.
+Source of truth: `constants/sister-brands.ts` (`SISTER_BRANDS`, `BRAND_FAMILY`).
+Combined logos strip: `public/branding/brand-logos.png`.
 
-| Brand | Role on landing |
-| --- | --- |
-| **Mang Felipe** | Primary hero / nav mark (forest green circle, serif) |
-| **Raken Rolls** | Sister snack line (red; Lumpia, Turon, atbp.) |
-| **Oh My Bilao!** | Sister bilao / party packs (orange-coral) |
+| Brand | Role on landing | Contact / place |
+| --- | --- | --- |
+| **Mang Felipe** | Primary hero / nav mark | See `SHOP_CONTACT` + `APP_DETAILS` |
+| **Rak en Rolls** | Sister snack line | Maria Clara St, La Huerta, Parañaque 1700 · 0995 017 6288 · rakenrollsph@gmail.com · IG `@rakenrollsph` |
+| **Oh My Bilao!** | Sister bilao / party packs | JP Rizal St, La Huerta, Parañaque 1700 · 0998 302 4209 · mangfelipekitchen@gmail.com |
+
+### Rak en Rolls
+
+- Tagline: **Lumpia, Turon & More**
+- Blurb: Crispy homemade rolls and pastries — the perfect side dish or merienda treat.
+- Address: 7353 Maria Clara Street, La Huerta, Parañaque City, Parañaque, Philippines, 1700
+- Phone: 0995 017 6288
+- Email: rakenrollsph@gmail.com
+- Instagram: [rakenrollsph](https://www.instagram.com/rakenrollsph/)
+- Assets: `/logo/rak%20en%20rolls.jpg`, `/branding/rak-en-rolls-banner.jpg`
+
+### Oh My Bilao!
+
+- Tagline: **Party Bilao Specialists**
+- Blurb: Generous bilao trays for any occasion — from intimate gatherings to large celebrations.
+- Address: 6827 JP Rizal St. La Huerta, Parañaque, Philippines, 1700
+- Phone: 0998 302 4209
+- Email: mangfelipekitchen@gmail.com
+- Assets: `/logo/oh-my-bilao.jpg`, `/branding/oh-my-bilao-banner.png`
 
 Do not invent a fourth brand mark. Mang Felipe wins first viewport hierarchy.
+Sister brands on Home “Our brands”, History, and footer — not as nav pills.
 
 ---
 
@@ -86,7 +107,7 @@ Mobile: hamburger or compact drawer with the same links + Order CTA.
 | Block | Content |
 | --- | --- |
 | Brand | Mang Felipe + short Happy Moments Food Corporation line |
-| Sister brands | Raken Rolls + Oh My Bilao! logos or names (links optional) |
+| Sister brands | From `SISTER_BRANDS`: names + optional short taglines; full address/phone on History or brand cards, not a dense footer wall |
 | Nav mirrors | Home, History, Order, Track |
 | Contact | From `constants/contact.ts` (`SHOP_CONTACT`): email
   `mangfelipekitchen@gmail.com`, phones `0917 310 2345` + `0998 302 4209` |
@@ -122,8 +143,9 @@ No stats strip, schedule chips, or floating badges on hero media.
 
 ### 2. Our brands
 
-Introduce Mang Felipe (primary), Raken Rolls, Oh My Bilao! under Happy Moments
-Food Corporation. Short line each. Link History for the full story.
+Introduce Mang Felipe (primary), Rak en Rolls, Oh My Bilao! under Happy Moments
+Food Corporation. Use `SISTER_BRANDS` tagline + description each. Link History
+for the full story / addresses.
 
 ### 3. How ordering works
 

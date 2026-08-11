@@ -20,8 +20,10 @@ Stack rules: `docs/TECHNOLOGY_STACK.md`.
 | Brand | Role |
 | --- | --- |
 | Mang Felipe | **Main app brand** (home hero, nav, primary identity) |
-| Raken Rolls | Sister line (Lumpia, Turon, atbp.) — shown on Home + History |
-| Oh My Bilao! | Sister bilao/party line — shown on Home + History |
+| Rak en Rolls | Sister line — Lumpia, Turon & More (La Huerta; IG `@rakenrollsph`) |
+| Oh My Bilao! | Sister bilao/party line — Party Bilao Specialists (La Huerta) |
+
+Full sister contact/address/copy: `constants/sister-brands.ts`.
 
 Logo reference: `public/branding/brand-logos.png`. Public pages:
 `docs/LANDING.md` (Home, History, navbar, footer) + Track
@@ -42,8 +44,9 @@ Logo reference: `public/branding/brand-logos.png`. Public pages:
 4. Optional later: brand or CMS tables only if owner needs editable story/copy
    without deploys. Do not add until that need is real.
 5. Menu categories may be *presented* under sister-brand flavor in UI
-   (rolls → Raken Rolls, bilao packs → Oh My Bilao!), but catalog rows stay
-   `Category` / `MenuItem` / `MenuItemVariant` only.
+   (rolls → Rak en Rolls, bilao packs → Oh My Bilao!), but catalog rows stay
+   `Category` / `MenuItem` / `MenuItemVariant` only. Sister place/contact copy
+   lives in `constants/sister-brands.ts`, not Postgres.
 6. **Track order** is a public lookup (`orderNumber` + `customerPhone`).
    Admin may set `lalamoveTrackingUrl` (manual Lalamove share link); app emails
    the customer when `customerEmail` is set. No new tables for v1.

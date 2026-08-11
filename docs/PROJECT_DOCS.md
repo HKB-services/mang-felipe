@@ -16,14 +16,15 @@ Manila, Cavite, and Laguna since 2020. Orders: Viber +63 0917 310 2345
 
 ## Brands / logos
 
-Three circular logos under Happy Moments Food Corporation. Reference image:
+Three brands under Happy Moments Food Corporation. Data:
+`constants/sister-brands.ts` (`SISTER_BRANDS`, `BRAND_FAMILY`). Combined strip:
 `public/branding/brand-logos.png`.
 
-| Brand | Role | Look |
+| Brand | Role | Look / pitch |
 | --- | --- | --- |
-| **Mang Felipe** | **Main brand** for this app (home, header, primary identity) | Dark forest-green circle, white serif “Mang / Felipe” |
-| **Raken Rolls** | Sister / snack line (Lumpia, Turon, etc.) shown on home + history | Bright red circle, bubbly “RAKEN ROLLS”, tagline “LUMPIA, TURON, atbp.” |
-| **Oh My Bilao!** | Sister / bilao party line shown on home + history | Orange-coral circle, rounded “Oh My / Bilao!” |
+| **Mang Felipe** | **Main app brand** (home, header, primary identity) | Forest green; catering trays · see `APP_DETAILS` |
+| **Rak en Rolls** | Sister snack line | Red · “Lumpia, Turon & More” · merienda rolls/pastries · La Huerta Parañaque · IG `@rakenrollsph` · 0995 017 6288 · rakenrollsph@gmail.com |
+| **Oh My Bilao!** | Sister bilao / party line | Coral · “Party Bilao Specialists” · bilao trays · La Huerta Parañaque · 0998 302 4209 · mangfelipekitchen@gmail.com |
 
 Use Mang Felipe as the hero/nav mark. Show all three on Home and History to
 tell the full business story. Do not invent a fourth brand mark.
@@ -37,8 +38,9 @@ Canonical landing / nav / footer / track rules: `docs/LANDING.md`.
 - Brand-first first viewport: Mang Felipe as the dominant identity.
 - Short pitch + CTA into the order form / menu.
 - Secondary CTA: Track order.
-- Introduce the three brands (Mang Felipe primary; Raken Rolls + Oh My Bilao!
-  as related lines under Happy Moments Food Corporation).
+- Introduce the three brands (Mang Felipe primary; Rak en Rolls + Oh My Bilao!
+  as related lines under Happy Moments Food Corporation). Use `SISTER_BRANDS`
+  for taglines, addresses, phones, email, Instagram.
 - Shared public **navbar** + **footer** (see `docs/LANDING.md`).
 
 ### History (how the business started)
@@ -143,8 +145,9 @@ Display these on checkout. Source of truth: `constants/payment.ts`.
   Dynamite; Turon; Minatamis; Rice; Halo-Halo Bilao; Party Bilao; Packed Meals.
 - Sister-brand flavor mapping (UI only for now, not separate DB brands):
   - Mang Felipe → core catering trays (pansit, meats, seafood, veggies, rice, …)
-  - Raken Rolls → Lumpia / Dynamite / Turon style rolls
+  - Rak en Rolls → Lumpia / Dynamite / Turon style rolls
   - Oh My Bilao! → Halo-Halo Bilao / Party Bilao packs
+  Contact/place details: `constants/sister-brands.ts`.
 - Sizes not uniform: some items skip Family; portion text varies
   (pax / kilos / sticks / rolls / per meal).
 - Business rules from menu:
