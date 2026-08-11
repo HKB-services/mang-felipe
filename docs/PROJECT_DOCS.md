@@ -63,6 +63,12 @@ Owner flow: paste Lalamove link on order → save to DB → email customer (if
 email on order). Not our own GPS map.
 Feature docs: `features/track-order/track-order.docs.md`.
 
+### Contact (customer)
+
+Guest **Contact** at `/contact`: Viber / phone / email plus **address + map
+per brand** (`constants/brand-locations.ts`). Mang Felipe kitchen pin currently
+shares JP Rizal with Oh My Bilao! until owner confirms a separate pin.
+
 ## Current decisions
 
 - Locked stack: see `docs/TECHNOLOGY_STACK.md`.

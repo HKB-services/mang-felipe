@@ -1,5 +1,6 @@
 export * from "./app.details"
 export * from "./app.routes"
+export * from "./brand-locations"
 export * from "./contact"
 export * from "./payment"
 export * from "./sister-brands"

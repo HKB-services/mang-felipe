@@ -3,6 +3,7 @@ import { IconBrandFacebook, IconBrandInstagram } from "@tabler/icons-react";
 
 import AppLogo from "@/components/AppLogo";
 import { APP_DETAILS } from "@/constants/app.details";
+import { ROUTES } from "@/constants/app.routes";
 import { SHOP_CONTACT } from "@/constants/contact";
 import { PUBLIC_NAV_LINKS } from "../utils/public-nav";
 
@@ -87,6 +88,12 @@ const LandingFooter = () => {
           <p className="mt-6 text-sm leading-6 text-emerald-50/75">
             Pay via UnionBank, GCash, or BPI. Payment details shown at checkout.
           </p>
+          <Link
+            href={ROUTES.CONTACT}
+            className="mt-4 inline-flex text-sm font-medium text-[#f2bd65] underline-offset-4 transition hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-white"
+          >
+            Locations &amp; maps
+          </Link>
           <div className="mt-6 flex items-center gap-3">
             <a
               href="https://www.facebook.com/MangFelipeKitchen"

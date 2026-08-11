@@ -44,7 +44,7 @@ const LandingNavbar = () => {
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <AppLogo width={40} height={40} className="size-10" />
+        <AppLogo width={40} height={40} className="size-10" priority />
 
         <div className="hidden items-center gap-8 md:flex">
           {PUBLIC_NAV_LINKS.map((link) => {

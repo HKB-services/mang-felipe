@@ -162,12 +162,20 @@ const BrandsSection = () => {
               Meet brands, places, and stories behind Happy Moments Food
               Corporation.
             </p>
-            <Link
-              href={ROUTES.HISTORY}
-              className="w-fit text-sm font-semibold text-[#103d2d] underline decoration-[#e56d4d] decoration-2 underline-offset-6 transition hover:text-[#e56d4d] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#103d2d] dark:text-white dark:focus-visible:outline-white"
-            >
-              Our story
-            </Link>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <Link
+                href={ROUTES.CONTACT}
+                className="w-fit text-sm font-semibold text-[#103d2d] underline decoration-[#e56d4d] decoration-2 underline-offset-6 transition hover:text-[#e56d4d] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#103d2d] dark:text-white dark:focus-visible:outline-white"
+              >
+                Locations &amp; maps
+              </Link>
+              <Link
+                href={ROUTES.HISTORY}
+                className="w-fit text-sm font-semibold text-[#103d2d] underline decoration-[#e56d4d] decoration-2 underline-offset-6 transition hover:text-[#e56d4d] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#103d2d] dark:text-white dark:focus-visible:outline-white"
+              >
+                Our story
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

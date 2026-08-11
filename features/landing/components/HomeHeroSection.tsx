@@ -135,8 +135,6 @@ const HomeHeroSection = () => {
             </div>
           </motion.div>
         </div>
-
-        <div aria-hidden className="hero-scallop absolute inset-x-0 bottom-0" />
       </section>
     </MotionConfig>
   )

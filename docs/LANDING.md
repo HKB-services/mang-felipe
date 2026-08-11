@@ -24,12 +24,13 @@ Product scope: `docs/PROJECT_DOCS.md`. Stack: `docs/TECHNOLOGY_STACK.md`.
 | --- | --- | --- |
 | `/` | Home (landing) | `features/landing/` |
 | `/history` | History / how we started | `features/landing/` |
+| `/contact` | Contact / locations + maps | `features/landing/` |
 | `/order` | Menu + guest checkout | `features/orders/` |
 | `/track` | Track your order / delivery | `features/track-order/` |
 | `/orders/[orderNumber]` | Post-submit / thank-you status | `features/orders/` |
 
 Add these to `constants/app.routes.ts` when wiring pages (`HOME`, `HISTORY`,
-`ORDER`, `TRACK`, …).
+`CONTACT`, `ORDER`, `TRACK`, …).
 
 Public shell layout: `app/(public)/layout.tsx` wraps navbar + footer + children.
 
@@ -84,6 +85,7 @@ not a dashboard chrome.
 | Logo / wordmark | Mang Felipe → `/` |
 | Home | `/` |
 | History | `/history` |
+| Contact | `/contact` |
 | Order | `/order` (primary text link or subtle) |
 | Track order | `/track` |
 | Order CTA | Button → `/order` (same destination; stronger visual weight) |
@@ -93,10 +95,10 @@ Mobile: hamburger or compact drawer with the same links + Order CTA.
 ### Rules
 
 - Mang Felipe mark is the only brand in the nav bar (sister brands live in
-  page body / footer, not a pill cluster in the nav).
+  page body / footer / Contact, not a pill cluster in the nav).
 - Active route indicated with existing design-system patterns.
 - No admin / login in public navbar (admin uses `/login` separately).
-- Keep link set small: Home, History, Order, Track.
+- Keep link set small: Home, History, Contact, Order, Track.
 
 ---
 
@@ -107,10 +109,11 @@ Mobile: hamburger or compact drawer with the same links + Order CTA.
 | Block | Content |
 | --- | --- |
 | Brand | Mang Felipe + short Happy Moments Food Corporation line |
-| Sister brands | From `SISTER_BRANDS`: names + optional short taglines; full address/phone on History or brand cards, not a dense footer wall |
-| Nav mirrors | Home, History, Order, Track |
+| Sister brands | From `SISTER_BRANDS`: names + optional short taglines; full address/phone on Contact (maps) or History — not a dense footer wall |
+| Nav mirrors | Home, History, Contact, Order, Track |
 | Contact | From `constants/contact.ts` (`SHOP_CONTACT`): email
-  `mangfelipekitchen@gmail.com`, phones `0917 310 2345` + `0998 302 4209` |
+  `mangfelipekitchen@gmail.com`, phones `0917 310 2345` + `0998 302 4209`;
+  link to `/contact` for locations & maps |
 | Payment note | Manual channels listed briefly, or “Pay via UnionBank / GCash / BPI” |
 | Legal / meta | “Prices subject to change.” Delivery fee not included. |
 
@@ -144,8 +147,8 @@ No stats strip, schedule chips, or floating badges on hero media.
 ### 2. Our brands
 
 Introduce Mang Felipe (primary), Rak en Rolls, Oh My Bilao! under Happy Moments
-Food Corporation. Use `SISTER_BRANDS` tagline + description each. Link History
-for the full story / addresses.
+Food Corporation. Use `SISTER_BRANDS` tagline + description each. Link Contact
+for addresses / maps; History for the full story.
 
 ### 3. How ordering works
 
@@ -154,7 +157,30 @@ Track.
 
 ### 4. Closing CTA
 
-Repeat Order CTA. Show shop contact (`SHOP_CONTACT`) for packed meals / questions.
+Repeat Order CTA. Show shop contact (`SHOP_CONTACT`) and link to `/contact`
+for packed meals / questions / locations.
+
+---
+
+## Contact page
+
+Route: `/contact`. Data: `constants/brand-locations.ts` (`BRAND_LOCATIONS`,
+`getMapsLinks`).
+
+### Contents
+
+| Block | Content |
+| --- | --- |
+| Hero | Visit / find us; primary Viber + Order CTA; shop email/phones |
+| Locations | One block per brand: logo, address, phone, email, Google Maps embed + “Open in Maps” |
+
+### Rules
+
+- Source of truth for place pins is `BRAND_LOCATIONS` (not footer).
+- Mang Felipe kitchen pin currently shares JP Rizal with Oh My Bilao! (same
+  kitchen email). Confirm with owner if a separate Mang Felipe pin exists.
+- No contact form / chat widget in v1 — phone, Viber, email, maps only.
+- Same navbar + footer as other public pages.
 
 ---
 
@@ -162,7 +188,7 @@ Repeat Order CTA. Show shop contact (`SHOP_CONTACT`) for packed meals / question
 
 - Story of how the business started (static copy v1).
 - All three logos + how lines relate (catering / rolls / bilao).
-- CTA back to Order.
+- CTA back to Order; optional link to Contact for maps.
 - Same navbar + footer.
 
 Owner still supplies founding narrative; placeholder copy OK until then.
