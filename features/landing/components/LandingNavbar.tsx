@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { IconMenu2, IconShoppingBag } from "@tabler/icons-react"
@@ -19,14 +19,30 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { PUBLIC_NAV_LINKS } from "../utils/public-nav"
+import { HERO_BG_CLASS } from "../utils/hero-theme"
 
 const LandingNavbar = () => {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-sm">
+    <header
+      className={cn(
+        "sticky top-0 z-40 border-b transition-colors duration-200",
+        scrolled
+          ? "border-border bg-background/80 backdrop-blur-sm"
+          : cn("border-transparent", HERO_BG_CLASS)
+      )}
+    >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <AppLogo width={40} height={40} className="size-10" />
 

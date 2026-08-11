@@ -190,3 +190,24 @@
     @apply font-sans;
   }
 }
+
+/* HomeHeroSection: bilao-rim scallop divider + entrance motion */
+.hero-scallop {
+  height: 26px;
+  background-color: var(--background);
+  -webkit-mask-image: radial-gradient(circle at 15px -6px, transparent 15px, black 16px);
+  mask-image: radial-gradient(circle at 15px -6px, transparent 15px, black 16px);
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-size: 30px 26px;
+  mask-size: 30px 26px;
+}
+@media (min-width: 640px) {
+  .hero-scallop {
+    height: 32px;
+    -webkit-mask-image: radial-gradient(circle at 18px -7px, transparent 18px, black 19px);
+    mask-image: radial-gradient(circle at 18px -7px, transparent 18px, black 19px);
+    -webkit-mask-size: 36px 32px;
+    mask-size: 36px 32px;
+  }
+}

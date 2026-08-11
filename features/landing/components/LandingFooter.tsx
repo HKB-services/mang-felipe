@@ -1,16 +1,10 @@
 import Link from "next/link";
+import { IconBrandFacebook, IconBrandInstagram } from "@tabler/icons-react";
 
 import AppLogo from "@/components/AppLogo";
 import { APP_DETAILS } from "@/constants/app.details";
-import { ROUTES } from "@/constants/app.routes";
 import { SHOP_CONTACT } from "@/constants/contact";
-
-const publicLinks = [
-  { href: ROUTES.HOME, label: "Home" },
-  { href: ROUTES.HISTORY, label: "Our story" },
-  { href: ROUTES.ORDER, label: "Order now" },
-  { href: ROUTES.TRACK, label: "Track order" },
-];
+import { PUBLIC_NAV_LINKS } from "../utils/public-nav";
 
 const LandingFooter = () => {
   return (
@@ -55,7 +49,7 @@ const LandingFooter = () => {
             aria-label="Footer navigation"
             className="mt-5 flex flex-col items-start gap-3"
           >
-            {publicLinks.map((link) => (
+            {PUBLIC_NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -93,6 +87,23 @@ const LandingFooter = () => {
           <p className="mt-6 text-sm leading-6 text-emerald-50/75">
             Pay via UnionBank, GCash, or BPI. Payment details shown at checkout.
           </p>
+          <div className="mt-6 flex items-center gap-3">
+            <a
+              href="https://www.facebook.com/MangFelipeKitchen"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Mang Felipe Kitchen on Facebook"
+              className="grid size-9 place-items-center rounded-full border border-white/25 text-emerald-50/80 transition hover:border-white hover:bg-white hover:text-[#103d2d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <IconBrandFacebook className="size-5" aria-hidden />
+            </a>
+            <span
+              aria-label="Instagram link coming soon"
+              className="grid size-9 place-items-center rounded-full border border-white/15 text-emerald-50/40"
+            >
+              <IconBrandInstagram className="size-5" aria-hidden />
+            </span>
+          </div>
         </div>
       </div>
 
