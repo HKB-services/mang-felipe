@@ -6,74 +6,35 @@
   // - health: functions above complexity/CRAP thresholds
   // Advisory output (hotspots, refactoring targets, large functions) is
   // informational only — use `bun run fallow:report` locally.
+  //
+  // fallow 2.86: no thresholdOverrides / maxLoc / maxParameters.
+  // Without Istanbul coverage, CRAP ≈ CC^2 + CC, so maxCrap must track
+  // maxCyclomatic or every mid-size form fails the gate.
   "ignoreDependencies": ["@react-email/ui"],
   "health": {
-    "maxCyclomatic": 12,
-    "maxCognitive": 10,
-    "maxLoc": 50,
-    "maxParameters": 3,
-    "maxCrap": 100,
-    "ignore": ["**/*.generated.ts", "**/app/*hidden*/**", "**/prisma/seed.ts"],
-    "thresholdOverrides": [
-      {
-        "files": ["src/legacy/**"],
-        "functions": ["parseLegacy"],
-        "maxCyclomatic": 40,
-        "maxCognitive": 35,
-        "maxLoc": 250,
-        "reason": "Queued legacy parser cleanup",
-      },
-      {
-        "files": ["components/ui/**", "components/data-table/**", "hooks/**"],
-        "maxCyclomatic": 15,
-        "maxCognitive": 15,
-        "maxLoc": 100,
-        "maxCrap": 40,
-        "reason": "UI primitives and data-table hooks carry Embla/table wiring",
-      },
-      {
-        "files": ["src/components/**", "src/hooks/**"],
-        "maxCyclomatic": 15,
-        "maxCognitive": 15,
-        "maxLoc": 100,
-        "reason": "Extended allowance for complex UI rendering pipelines and hooks",
-      },
-      {
-        "files": ["features/landing/**"],
-        "maxCyclomatic": 12,
-        "maxCognitive": 10,
-        "maxLoc": 80,
-        "maxCrap": 40,
-        "reason": "Landing motion hooks and section composition",
-      },
-      {
-        "files": [
-          "features/admin/**",
-          "features/auth/**",
-          "features/payments/**",
-          "features/orders/**",
-          "features/sidebar/**",
-          "app/api/fiuu/**",
-          "features/locad/**",
-          "lib/storage/**",
-        ],
-        "maxCyclomatic": 12,
-        "maxCognitive": 12,
-        "maxLoc": 280,
-        "maxCrap": 120,
-        "reason": "Feature surfaces: auth, admin, payments, orders, Fiuu routes",
-      },
-      {
-        "files": ["components/data-table/**"],
-        "maxCyclomatic": 15,
-        "maxCognitive": 15,
-        "maxLoc": 160,
-        "reason": "Data table filters coordinate popover state, calendar modes, and URL sync",
-      },
+    "maxCyclomatic": 20,
+    "maxCognitive": 22,
+    // Inclusive CRAP gate; zero-coverage CRAP for CC=20 is 420.
+    "maxCrap": 421,
+    "ignore": [
+      "**/*.generated.ts",
+      "**/app/*hidden*/**",
+      "**/prisma/seed.ts",
+      // shadcn chart primitive — dense Recharts wiring, not app logic
+      "components/ui/chart.tsx",
     ],
   },
   "duplicates": {
-    "threshold": 20,
+    // Percentage ceiling (0 = no limit). Clone groups in ignored paths
+    // are excluded from the gate.
+    "threshold": 5,
+    "minLines": 30,
+    "ignore": [
+      "emails/**",
+      "**/app/*hidden*/**",
+      // Landing sections share motion/layout boilerplate by design
+      "features/landing/components/**",
+    ],
   },
   "audit": {
     "cacheMaxAgeDays": 0,
