@@ -29,6 +29,8 @@ model MenuItem {
   code        String?
   sortOrder   Int               @default(0)
   isActive    Boolean           @default(true)
+  /// Controls appearance in Home's Featured Items section.
+  isFeatured  Boolean           @default(false)
   /// R2 object key for item image (optional).
   imageKey    String?
   createdAt   DateTime          @default(now())
@@ -39,6 +41,7 @@ model MenuItem {
   @@index([categoryId])
   @@index([sortOrder])
   @@index([isActive])
+  @@index([isActive, isFeatured, sortOrder])
   @@map("menu_item")
 }
 

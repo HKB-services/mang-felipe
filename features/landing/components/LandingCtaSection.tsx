@@ -84,9 +84,9 @@ const LandingCtaSection = () => {
             >
               <Button
                 size="lg"
+                variant="default"
                 render={<Link href={ROUTES.ORDER} />}
                 nativeButton={false}
-                className="bg-[#e56d4d] px-6 text-base text-white hover:bg-[#d75f40]"
               >
                 Order now
               </Button>
@@ -95,7 +95,6 @@ const LandingCtaSection = () => {
                 variant="outline"
                 render={<Link href={ROUTES.TRACK} />}
                 nativeButton={false}
-                className="border-white/30 bg-transparent px-6 text-base text-white hover:bg-white/10"
               >
                 Track your order
               </Button>

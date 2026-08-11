@@ -41,6 +41,8 @@ Canonical landing / nav / footer / track rules: `docs/LANDING.md`.
 - Introduce the three brands (Mang Felipe primary; Rak en Rolls + Oh My Bilao!
   as related lines under Happy Moments Food Corporation). Use `SISTER_BRANDS`
   for taglines, addresses, phones, email, Instagram.
+- **Featured items** as a **separate section** below brands (not in hero): 3–6
+  teaser dishes → `/order`. Details in `docs/LANDING.md`.
 - Shared public **navbar** + **footer** (see `docs/LANDING.md`).
 
 ### History (how the business started)

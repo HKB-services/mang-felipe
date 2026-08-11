@@ -72,6 +72,10 @@ Logo reference: `public/branding/brand-logos.png`. Public pages:
 11. Packed Meals is a normal orderable category. Seed starts at ₱120 per meal;
     contact for special menu stays in `constants/contact.ts` (`SHOP_CONTACT`) /
     category description.
+12. **Featured on Home (planned):** `MenuItem.isFeatured` — admin flag for the
+    Home “Featured items” section (`docs/LANDING.md`). Not in schema yet; add
+    before wiring that section. Query: `isActive && isFeatured`, cap 3–6,
+    prefer existing `sortOrder`.
 
 ### Ordering
 
@@ -352,6 +356,8 @@ Seed is upsert-by-slug. Safe to re-run to refresh catalog prices/labels.
 
 ## Future (not modeled yet)
 
+- **`MenuItem.isFeatured` (Boolean, default false):** drives Home Featured
+  items section. Admin toggle in menu CRUD. Hide section when none featured.
 - FIUU (or other) online payment: see
   `docs/FIUU_NEXTJS_PRISMA_SERVER_ACTIONS.md`. Likely new payment status fields /
   provider refs on `order`; keep manual channels until then.

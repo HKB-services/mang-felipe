@@ -45,6 +45,7 @@ type ItemSeed = {
   description?: string
   notes?: string
   sortOrder: number
+  isFeatured?: boolean
   variants: VariantSeed[]
 }
 
@@ -136,6 +137,7 @@ const MENU: CategorySeed[] = [
         name: "Pansit Canton",
         slug: "pansit-canton",
         sortOrder: 2,
+        isFeatured: true,
         variants: [
           family(PANSIT_PORTIONS.family, 900),
           fiesta(PANSIT_PORTIONS.fiesta, 1100),
@@ -183,6 +185,7 @@ const MENU: CategorySeed[] = [
         name: "Lechon Pork Belly",
         slug: "lechon-pork-belly",
         sortOrder: 1,
+        isFeatured: true,
         notes: "Place your order at least two days in advance.",
         variants: [
           fiesta("Up to 12 pax / 2.5 Kilos", 2450),
@@ -470,6 +473,7 @@ const MENU: CategorySeed[] = [
         code: "B4",
         description: "Pansit Bihon, Pinoy Spaghetti, Cheesy Puto, Fried Chicken",
         sortOrder: 1,
+        isFeatured: true,
         variants: [
           fiesta("Up to 12 pax", 1950),
           superSize("Up to 20 pax", 2950),
@@ -535,6 +539,7 @@ async function main() {
             notes: item.notes,
             sortOrder: item.sortOrder,
             isActive: true,
+            isFeatured: item.isFeatured ?? false,
           },
           update: {
             categoryId: upsertedCategory.id,
@@ -544,6 +549,7 @@ async function main() {
             notes: item.notes,
             sortOrder: item.sortOrder,
             isActive: true,
+            ...(item.isFeatured ? { isFeatured: true } : {}),
           },
         })
 

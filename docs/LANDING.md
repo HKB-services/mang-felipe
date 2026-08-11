@@ -32,7 +32,10 @@ Product scope: `docs/PROJECT_DOCS.md`. Stack: `docs/TECHNOLOGY_STACK.md`.
 Add these to `constants/app.routes.ts` when wiring pages (`HOME`, `HISTORY`,
 `CONTACT`, `ORDER`, `TRACK`, …).
 
-Public shell layout: `app/(public)/layout.tsx` wraps navbar + footer + children.
+Public shell layout: `app/(public)/layout.tsx` wraps navbar + footer +
+`ScrollToTop` + children. Scroll-to-top button shows after ~400px scroll;
+click uses `window.scrollTo({ behavior: "smooth" })` (respects
+`prefers-reduced-motion`).
 
 ---
 
@@ -150,12 +153,29 @@ Introduce Mang Felipe (primary), Rak en Rolls, Oh My Bilao! under Happy Moments
 Food Corporation. Use `SISTER_BRANDS` tagline + description each. Link Contact
 for addresses / maps; History for the full story.
 
-### 3. How ordering works
+### 3. Featured items (separate section — not hero)
+
+One job: tease the menu and push guests to `/order`.
+
+| Rule | Detail |
+| --- | --- |
+| Placement | **Below** brands (and above or beside “How ordering works”) — never in the first viewport / hero |
+| Count | **3–6** items max |
+| Content per item | Name, optional short note, one price tease (e.g. starting size), link/CTA into Order |
+| Source | Active `MenuItem` rows with `isFeatured = true` (see `docs/DATABASE_SCHEMA.md`). Admin toggles featured in menu CRUD |
+| Empty state | If none featured, **hide the whole section** (no placeholder cards) |
+| Layout | Simple row/grid — not a card collage of badges, chips, or promo stickers |
+| CTA | Section ends with **Order now** → `/order` (view full menu) |
+
+Do not dump the full catalog here. Featured is a merch tease (e.g. Lechon,
+Party Bilao, popular pansit), not a second order form.
+
+### 4. How ordering works
 
 Short steps: browse → checkout (next-day + slot) → pay → track. Link Order +
 Track.
 
-### 4. Closing CTA
+### 5. Closing CTA
 
 Repeat Order CTA. Show shop contact (`SHOP_CONTACT`) and link to `/contact`
 for packed meals / questions / locations.
@@ -211,8 +231,8 @@ When implementing UI, follow repo frontend design rules / skills.
 
 ```text
 features/landing/
-  pages/           # HomePage, HistoryPage
-  components/      # PublicNavbar, PublicFooter, Hero, BrandsRow, …
+  pages/           # HomePage, HistoryPage, ContactPage
+  components/      # Navbar, Footer, Hero, Brands, FeaturedItems, …
   utils/           # nav link config if needed
   landing.docs.md
 

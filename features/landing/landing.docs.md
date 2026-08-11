@@ -7,10 +7,10 @@ Brands + product scope: `docs/PROJECT_DOCS.md`.
 
 ## Responsibilities
 
-- Home landing composition (hero, brands, how-it-works, CTA).
+- Home landing composition (hero, brands, **featured items**, how-it-works, CTA).
 - History story page (static copy v1).
 - Contact / locations page (maps + address per brand).
-- `LandingNavbar` + `LandingFooter` used by `app/(public)/layout.tsx`.
+- `LandingNavbar` + `LandingFooter` + `ScrollToTop` used by `app/(public)/layout.tsx`.
 
 ## Planned structure
 
@@ -22,14 +22,26 @@ features/landing/
   components/
     LandingNavbar.tsx
     LandingFooter.tsx
+    ScrollToTop.tsx      # fixed; show after ~400px scroll; smooth to top
     HomeHeroSection.tsx
     BrandsSection.tsx
+    FeaturedItemsSection.tsx   # 3–6 featured MenuItems; hide if empty
     HowItWorksSection.tsx
     LandingCtaSection.tsx
   utils/
     public-nav.ts
   landing.docs.md
 ```
+
+## Home section order
+
+1. Hero  
+2. Our brands  
+3. **Featured items** (separate section; not in hero)  
+4. How ordering works  
+5. Closing CTA  
+
+Featured rules: `docs/LANDING.md` § Featured items. Data: `MenuItem.isFeatured`.
 
 ## Nav links
 
