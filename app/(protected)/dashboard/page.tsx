@@ -1,9 +1,5 @@
-import React from 'react'
+import DashboardPage from "@/features/admin/dashboard/pages/DashboardPage"
 
-const page = () => {
-    return (
-        <div>page</div>
-    )
-}
+const Page = async () => <DashboardPage />
 
-export default page
+export default Page

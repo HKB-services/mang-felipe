@@ -22,22 +22,24 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-            <div className="flex w-full items-center justify-between">
-              <div className="flex items-center gap-2 px-4">
-                <SidebarTrigger className="-ml-1" />
+          <header className="flex h-16 shrink-0 items-center border-b bg-background/95 transition-[width,height] ease-linear supports-[backdrop-filter]:backdrop-blur group-has-data-[collapsible=icon]/sidebar-wrapper:h-14">
+            <div className="flex w-full items-center justify-between px-3 sm:px-5">
+              <div className="flex min-w-0 items-center gap-2">
+                <SidebarTrigger className="size-9 rounded-lg" />
                 <Separator
                   orientation="vertical"
-                  className="mr-2 data-[orientation=vertical]:h-7"
+                  className="mr-1 data-[orientation=vertical]:h-6"
                 />
-                <BreadcrumbSidebar />
+                <div className="min-w-0 overflow-hidden [&_[data-slot=breadcrumb-list]]:flex-nowrap [&_[data-slot=breadcrumb-page]]:truncate">
+                  <BreadcrumbSidebar />
+                </div>
               </div>
-              <div className="flex items-center gap-2 px-4">
+              <div className="flex shrink-0 items-center gap-1">
                 <ThemeToggle />
               </div>
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+          <div className="flex flex-1 flex-col p-5 sm:p-8">{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </Suspense>

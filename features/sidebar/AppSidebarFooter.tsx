@@ -24,7 +24,7 @@ const AppSidebarFooter = () => {
   const user = useAtomValue(userAuthAtom)
 
   return (
-    <SidebarFooter>
+    <SidebarFooter className="border-t border-sidebar-border p-3">
       <NavUser user={toNavUser(user)} />
     </SidebarFooter>
   )

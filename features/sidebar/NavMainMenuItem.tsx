@@ -78,6 +78,7 @@ const NavMainMenuItem = ({
         ) : (
           <SidebarMenuButton
             isActive={item.isActive}
+            className="h-10 rounded-lg px-2.5 data-active:font-semibold"
             render={<Link href={item.url} />}
             tooltip={item.title}
           >

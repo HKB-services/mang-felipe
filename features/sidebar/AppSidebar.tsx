@@ -11,9 +11,9 @@ const AppSidebar = () => {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" variant="inset">
       <AppSidebarHeader />
-      <SidebarContent>
+      <SidebarContent className="px-2 py-3">
         <NavMain groups={sidebarNavGroups} pathname={pathname} />
       </SidebarContent>
       <AppSidebarFooter />

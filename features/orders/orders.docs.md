@@ -1,6 +1,7 @@
 # Orders feature
 
-Guest menu, cart, checkout, post-submit receipt, and later admin review.
+Guest menu, cart, checkout, post-submit receipt. Admin review lives under
+`docs/ADMIN.md` / `features/admin/` (Lalamove form may stay shared here).
 
 ## Public routes
 

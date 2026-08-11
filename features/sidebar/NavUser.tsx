@@ -66,7 +66,7 @@ export function NavUser({
               render={
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  className="rounded-lg data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <UserInfo user={user} />
                   <IconDotsVertical className="ml-auto size-4" />

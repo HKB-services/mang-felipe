@@ -78,6 +78,7 @@ shares JP Rizal with Oh My Bilao! until owner confirms a separate pin.
 - Locked stack: see `docs/TECHNOLOGY_STACK.md`.
 - Business + DB logic: see `docs/DATABASE_SCHEMA.md`.
 - Landing + public chrome: see `docs/LANDING.md`.
+- Admin dashboard: see `docs/ADMIN.md` (+ `features/admin/admin.docs.md`).
 - Feature-based architecture under `features/`. Auth feature is reference shape.
 - Firebase Auth, Firestore, and Firebase Storage removed. Do not reintroduce.
 - Auth: Better Auth email/password for **admin only**. Sessions via cookies.
@@ -123,6 +124,8 @@ shares JP Rizal with Oh My Bilao! until owner confirms a separate pin.
     to customer (if email given); also visible on `/track`.
 
 ## Admin flow (protected)
+
+Canonical rules + planned routes/screens: `docs/ADMIN.md`.
 
 - CRUD food categories and items (name, category, notes, active flag).
 - CRUD size variants per item (label, portion text, price PHP).

@@ -28,6 +28,7 @@ Full sister contact/address/copy: `constants/sister-brands.ts`.
 Logo reference: `public/branding/brand-logos.png`. Public pages:
 `docs/LANDING.md` (Home, History, navbar, footer) + Track
 (`features/track-order/track-order.docs.md`) + Order form.
+Admin dashboard: `docs/ADMIN.md`.
 
 **Not in scope for the schema:** inventory/stock, online payment gateway (FIUU later), customer accounts, delivery-fee calculation, CMS tables for History copy (static page first).
 

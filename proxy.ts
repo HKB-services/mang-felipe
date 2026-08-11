@@ -44,7 +44,7 @@ function redirectAuthenticated(
     return null
   }
 
-  return NextResponse.redirect(new URL(ROUTES.HOME, request.url))
+  return NextResponse.redirect(new URL(ROUTES.DASHBOARD, request.url))
 }
 
 function clearStaleCookie(

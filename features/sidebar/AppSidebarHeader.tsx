@@ -5,29 +5,30 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import { ROUTES } from "@/constants"
-import Image from "next/image"
+import APP_DETAILS from "@/constants/app.details"
+import { IconToolsKitchen2 } from "@tabler/icons-react"
 import Link from "next/link"
+
 const AppSidebarHeader = () => {
   return (
-    <SidebarHeader>
+    <SidebarHeader className="border-sidebar-border px-3 py-4">
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton
             size="lg"
-            tooltip="Firebase Starter"
+            tooltip={APP_DETAILS.name}
+            className="h-auto rounded-lg px-1 py-1.5"
             render={<Link href={ROUTES.HOME} className="w-full" />}
           >
-            <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg">
-              <Image
-                src="/main_logo.png"
-                alt="Firebase Starter"
-                width={32}
-                height={32}
-              />
+            <div className="hidden size-9 shrink-0 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground group-data-[collapsible=icon]:flex">
+              <IconToolsKitchen2 className="size-4" aria-hidden />
             </div>
-            <div className="grid flex-1 text-center leading-tight group-data-[collapsible=icon]:hidden">
-              <span className="text-lg font-bold text-primary">
-                Firebase Starter
+            <div className="grid flex-1 text-left leading-tight group-data-[collapsible=icon]:hidden">
+              <span className="text-sm font-semibold tracking-tight text-sidebar-foreground">
+                {APP_DETAILS.name}
+              </span>
+              <span className="mt-0.5 text-[0.65rem] font-medium tracking-[0.16em] text-sidebar-foreground/60 uppercase">
+                Operations
               </span>
             </div>
           </SidebarMenuButton>

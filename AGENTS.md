@@ -7,6 +7,8 @@ Read `docs/TECHNOLOGY_STACK.md` before changing infrastructure, data, auth,
 storage, or deployment.
 Read `docs/LANDING.md` before changing public Home, History, navbar, footer,
 or Track order.
+Read `docs/ADMIN.md` before changing the protected dashboard, admin orders,
+admin menu CRUD, or sidebar ops nav.
 
 ## Setup
 
