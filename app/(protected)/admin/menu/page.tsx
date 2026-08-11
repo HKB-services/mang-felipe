@@ -1,5 +1,5 @@
-import MenuHubPage from "@/features/admin/menu/pages/MenuHubPage"
+import AdminManageMenu from "@/features/admin/menu/pages/AdminManageMenu"
 
-const Page = () => <MenuHubPage />
+const Page = () => <AdminManageMenu />
 
 export default Page

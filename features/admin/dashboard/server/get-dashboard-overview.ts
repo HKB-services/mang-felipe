@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma"
 
 const UPCOMING_DAYS = 7
+const dayFormatter = new Intl.DateTimeFormat("en-PH", {
+  weekday: "short",
+  day: "numeric",
+})
 
 function startOfDay(date: Date) {
   const result = new Date(date)
@@ -9,10 +13,7 @@ function startOfDay(date: Date) {
 }
 
 function formatDay(date: Date) {
-  return new Intl.DateTimeFormat("en-PH", {
-    weekday: "short",
-    day: "numeric",
-  }).format(date)
+  return dayFormatter.format(date)
 }
 
 export async function getDashboardOverview() {

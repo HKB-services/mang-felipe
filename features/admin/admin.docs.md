@@ -33,8 +33,8 @@ features/admin/
     server/
   orders/
     pages/
-      OrdersListPage.tsx      # planned
-      OrderDetailPage.tsx     # partial (exists)
+      AdminOrdersList.tsx      # planned
+      AdminOrderDetail.tsx     # partial (exists)
     actions/                  # planned review / list
   menu/                       # planned
     pages/

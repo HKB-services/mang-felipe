@@ -196,14 +196,14 @@ features/admin/
   users/                   # schemas + search helpers today
   orders/
     pages/
-      OrdersListPage.tsx   # planned
-      OrderDetailPage.tsx  # partial
+      AdminOrdersList.tsx   # planned
+      AdminOrderDetail.tsx  # partial
     actions/
       review-order.action.ts
       list-orders.action.ts   # or server loaders
   menu/
     pages/
-      MenuHubPage.tsx
+      AdminManageMenu.tsx
       CategoryEditPage.tsx
       ItemEditPage.tsx
     actions/

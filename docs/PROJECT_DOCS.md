@@ -79,6 +79,7 @@ shares JP Rizal with Oh My Bilao! until owner confirms a separate pin.
 - Business + DB logic: see `docs/DATABASE_SCHEMA.md`.
 - Landing + public chrome: see `docs/LANDING.md`.
 - Admin dashboard: see `docs/ADMIN.md` (+ `features/admin/admin.docs.md`).
+- Transactional email (react-email + Elastic Mail): see `docs/EMAIL.md`.
 - Feature-based architecture under `features/`. Auth feature is reference shape.
 - Firebase Auth, Firestore, and Firebase Storage removed. Do not reintroduce.
 - Auth: Better Auth email/password for **admin only**. Sessions via cookies.

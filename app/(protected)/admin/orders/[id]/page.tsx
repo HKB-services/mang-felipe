@@ -1,6 +1,6 @@
-import OrderDetailPage from "@/features/admin/orders/pages/OrderDetailPage"
+import AdminOrderDetail from "@/features/admin/orders/pages/AdminOrderDetail"
 
 export default async function Page({ params }: PageProps<"/admin/orders/[id]">) {
   const { id } = await params
-  return <OrderDetailPage orderId={id} />
+  return <AdminOrderDetail orderId={id} />
 }

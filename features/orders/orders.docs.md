@@ -44,7 +44,7 @@ Zod: `features/orders/schema/order-checkout.schema.ts`
 | --- | --- | --- |
 | `customerName` | yes | |
 | `customerPhone` | yes | |
-| `customerEmail` | no | Receipt email when set |
+| `customerEmail` | no | Receipt email when set via `emails/order-receipt.tsx` |
 | `fulfillmentType` | yes | `pickup` \| `delivery` |
 | `fulfillmentDate` | yes | Earliest = next day (`ORDER_MIN_LEAD_DAYS = 1`) |
 | `fulfillmentSlot` | yes | `10-12` / `2-4` / `5-7` |

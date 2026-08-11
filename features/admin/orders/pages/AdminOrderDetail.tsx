@@ -5,7 +5,7 @@ import { FULFILLMENT_SLOTS, FULFILLMENT_TYPES, PAYMENT_CHANNELS } from "@/consta
 import { formatFulfillmentDate, formatPhp } from "@/features/orders/utils/format"
 import { LalamoveTrackingForm } from "@/features/orders/components/LalamoveTrackingForm"
 
-export default async function OrderDetailPage({ orderId }: { orderId: string }) {
+export default async function AdminOrderDetail({ orderId }: { orderId: string }) {
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     select: {

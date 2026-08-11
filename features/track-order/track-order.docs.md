@@ -4,7 +4,8 @@ Guest **Track your order / delivery** — no customer login.
 
 Shell/nav: `docs/LANDING.md`. Order domain: `docs/DATABASE_SCHEMA.md`.
 Checkout fields: `features/orders/orders.docs.md`.
-Email: `services/email.service.ts` (Elastic Mail).
+Email: `services/email.service.ts` (Elastic Mail). Design + templates:
+`docs/EMAIL.md`.
 
 ## Purpose
 
@@ -149,7 +150,8 @@ z.object({
 Subject e.g. `Your Mang Felipe order {orderNumber} — delivery tracking`.
 
 Body: greeting, order number, fulfillment date/slot, **Lalamove link**, link
-to `/track` for status. Use Elastic Mail via `sendEmail`.
+to `/track` for status. Template: `emails/delivery-tracking.tsx`; render/send
+helper: `features/orders/server/send-order-emails.tsx`.
 
 If mail env missing → still save URL; surface admin warning that email failed.
 

@@ -3,26 +3,13 @@
 import { z } from "zod"
 import { ActionError, authActionClient } from "@/lib/safe.action"
 import { prisma } from "@/lib/prisma"
-import { sendEmail } from "@/services/email.service"
-import { ROUTES } from "@/constants/app.routes"
-import { FULFILLMENT_SLOTS } from "@/constants/payment"
-import { formatFulfillmentDate } from "@/features/orders/utils/format"
+import { sendDeliveryTrackingEmail } from "@/features/orders/server/send-order-emails"
 
 const SaveLalamoveTrackingSchema = z.object({
   orderId: z.string().min(1),
   lalamoveTrackingUrl: z.url(),
   resendEmail: z.boolean().optional(),
 })
-
-function buildTrackingEmailHtml(input: {
-  orderNumber: string
-  fulfillmentDate: Date
-  fulfillmentSlot: keyof typeof FULFILLMENT_SLOTS
-  lalamoveTrackingUrl: string
-  trackUrl: string
-}) {
-  return `<p>Hi, here's your delivery tracking link for Mang Felipe order <strong>${input.orderNumber}</strong>.</p><p><strong>Delivery date:</strong> ${formatFulfillmentDate(input.fulfillmentDate)} (${FULFILLMENT_SLOTS[input.fulfillmentSlot].label})</p><p><strong>Track your Lalamove delivery:</strong> <a href="${input.lalamoveTrackingUrl}">${input.lalamoveTrackingUrl}</a></p><p>You can also check your order status anytime at <a href="${input.trackUrl}">${input.trackUrl}</a>.</p>`
-}
 
 export const saveLalamoveTrackingAction = authActionClient
   .metadata({ actionName: "saveLalamoveTracking" })
@@ -62,17 +49,12 @@ export const saveLalamoveTrackingAction = authActionClient
     let emailWarning: string | null = null
 
     if (shouldEmail && updated.customerEmail && updated.lalamoveTrackingUrl) {
-      const trackUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? ""}${ROUTES.TRACK}?order=${encodeURIComponent(updated.orderNumber)}`
-      const result = await sendEmail({
-        recipients: [updated.customerEmail],
-        subject: `Your Mang Felipe order ${updated.orderNumber} — delivery tracking`,
-        htmlContent: buildTrackingEmailHtml({
-          orderNumber: updated.orderNumber,
-          fulfillmentDate: updated.fulfillmentDate,
-          fulfillmentSlot: updated.fulfillmentSlot,
-          lalamoveTrackingUrl: updated.lalamoveTrackingUrl,
-          trackUrl,
-        }),
+      const result = await sendDeliveryTrackingEmail({
+        customerEmail: updated.customerEmail,
+        fulfillmentDate: updated.fulfillmentDate,
+        fulfillmentSlot: updated.fulfillmentSlot,
+        lalamoveTrackingUrl: updated.lalamoveTrackingUrl,
+        orderNumber: updated.orderNumber,
       })
 
       if (result.success) {

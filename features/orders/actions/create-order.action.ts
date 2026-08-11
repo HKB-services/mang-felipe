@@ -5,12 +5,12 @@ import { z } from "zod"
 import { OrderCheckoutFormSchema } from "@/features/orders/schema/order-checkout.schema"
 import { objectExists } from "@/lib/storage/r2.server"
 import { prisma } from "@/lib/prisma"
-import { sendEmail } from "@/services/email.service"
+import { sendOrderReceiptEmail } from "@/features/orders/server/send-order-emails"
 
 const orderSuffix = customAlphabet("ABCDEFGHJKLMNPQRSTUVWXYZ23456789", 4)
 const proofPrefix = "orders/payment-proofs/guest/"
 
-const CreateOrderSchema = OrderCheckoutFormSchema.extend({
+const CreateOrderSchema = OrderCheckoutFormSchema.safeExtend({
   paymentProofKey: z.string().trim().min(1, "Payment proof is required"),
 })
 
@@ -21,10 +21,6 @@ function makeOrderNumber(now = new Date()) {
     String(now.getDate()).padStart(2, "0"),
   ].join("")
   return `HM-${date}-${orderSuffix()}`
-}
-
-function paymentReceiptHtml(input: z.infer<typeof CreateOrderSchema>, orderNumber: string, subtotalPhp: number) {
-  return `<p>Thank you for your Mang Felipe order.</p><p><strong>Order number:</strong> ${orderNumber}</p><p><strong>Food subtotal:</strong> ₱${subtotalPhp.toLocaleString("en-PH")}</p><p>Your payment proof is pending review. Keep your order number to track the status.</p>`
 }
 
 export async function createOrder(input: unknown) {
@@ -94,10 +90,14 @@ export async function createOrder(input: unknown) {
   })
 
   if (data.customerEmail) {
-    void sendEmail({
-      recipients: [data.customerEmail],
-      subject: `Your Mang Felipe order ${order.orderNumber}`,
-      htmlContent: paymentReceiptHtml(data, order.orderNumber, subtotalPhp),
+    void sendOrderReceiptEmail({
+      customerEmail: data.customerEmail,
+      customerName: data.customerName,
+      fulfillmentDate: data.fulfillmentDate,
+      fulfillmentSlot: data.fulfillmentSlot,
+      fulfillmentType: data.fulfillmentType,
+      orderNumber: order.orderNumber,
+      subtotalPhp,
     })
   }
 

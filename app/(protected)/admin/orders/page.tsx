@@ -1,5 +1,5 @@
-import OrdersListPage from "@/features/admin/orders/pages/OrdersListPage"
+import AdminOrdersList from "@/features/admin/orders/pages/AdminOrdersList"
 
-const Page = () => <OrdersListPage />
+const Page = () => <AdminOrdersList />
 
 export default Page

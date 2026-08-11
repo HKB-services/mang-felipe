@@ -9,6 +9,8 @@ Read `docs/LANDING.md` before changing public Home, History, navbar, footer,
 or Track order.
 Read `docs/ADMIN.md` before changing the protected dashboard, admin orders,
 admin menu CRUD, or sidebar ops nav.
+Read `docs/EMAIL.md` before changing transactional email templates, react-email
+layout, or Elastic Mail send behavior.
 
 ## Setup
 

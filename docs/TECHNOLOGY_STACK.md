@@ -21,6 +21,8 @@ duplicate this operational detail.
 - Object storage: Cloudflare R2
 - Validation: Zod
 - Language: TypeScript
+- Transactional email: Elastic Mail via `services/email.service.ts`; templates
+  via react-email (`docs/EMAIL.md`)
 
 Do not replace these choices without an explicit project decision.
 

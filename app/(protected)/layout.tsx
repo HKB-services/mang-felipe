@@ -39,7 +39,7 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </header>
-          <div className="flex flex-1 flex-col p-5 sm:p-8">{children}</div>
+          <div className="flex flex-1 flex-col p-4 sm:p-8">{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </Suspense>

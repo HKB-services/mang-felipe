@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from "@/config/env"
 import axios, { isAxiosError } from "axios"
 
@@ -12,7 +11,7 @@ interface SendEmailProps {
   recipients: string[]
   cc?: string[]
   subject: string
-  htmlContent: any
+  htmlContent: string
   attachments?: EmailAttachment[]
 }
 
