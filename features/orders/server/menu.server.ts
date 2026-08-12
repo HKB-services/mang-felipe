@@ -94,3 +94,4 @@ export async function getOrderProduct(slug: string) {
 }
 
 export type OrderMenu = Awaited<ReturnType<typeof getOrderMenu>>
+export type OrderProduct = Awaited<ReturnType<typeof getOrderProduct>>
