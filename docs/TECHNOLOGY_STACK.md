@@ -83,7 +83,7 @@ provider connection strings.
 ```dotenv
 # Neon / Prisma
 # Use Neon's pooled URL for normal application requests.
-DATABASE_URL="postgresql://USER:PASSWORD@HOST/DB?sslmode=require"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST/DB?sslmode=verify-full"
 # Use an unpooled/direct URL only when the installed Prisma version or migration
 
 # Better Auth

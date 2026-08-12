@@ -22,13 +22,14 @@ import { PUBLIC_NAV_LINKS } from "../utils/public-nav"
 import { HERO_BG_CLASS } from "../utils/hero-theme"
 import { CartSummary } from "@/features/orders/components/CartSummary"
 import { useOrderCart } from "@/features/orders/hooks/use-order-cart"
+import { useCartSheet } from "@/features/orders/hooks/use-cart-sheet"
 
 const LandingNavbar = () => {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [cartOpen, setCartOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { count } = useOrderCart()
+  const { open: cartSheetOpen, setOpen: setCartSheetOpen } = useCartSheet()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -78,7 +79,7 @@ const LandingNavbar = () => {
             size="icon"
             className="relative"
             aria-label={`Open cart${count ? `, ${count} items` : ""}`}
-            onClick={() => setCartOpen(true)}
+            onClick={() => setCartSheetOpen(true)}
           >
             <IconShoppingBag className="size-5 text-primary" />
             {count ? <span className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-[#b44c35] text-[10px] text-white">{count > 99 ? "99+" : count}</span> : null}
@@ -99,7 +100,7 @@ const LandingNavbar = () => {
             size="icon"
             className="relative"
             aria-label={`Open cart${count ? `, ${count} items` : ""}`}
-            onClick={() => setCartOpen(true)}
+            onClick={() => setCartSheetOpen(true)}
           >
             <IconShoppingBag className="size-5 text-primary" />
             {count ? <span className="absolute -top-1 -right-1 grid size-4 place-items-center rounded-full bg-[#b44c35] text-[10px] text-white">{count > 99 ? "99+" : count}</span> : null}
@@ -152,7 +153,7 @@ const LandingNavbar = () => {
         </div>
       </nav>
 
-      <Sheet open={cartOpen} onOpenChange={setCartOpen}>
+      <Sheet open={cartSheetOpen} onOpenChange={setCartSheetOpen}>
         <SheetContent side="right">
           <SheetHeader>
             <SheetTitle>Cart</SheetTitle>
