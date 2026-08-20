@@ -28,6 +28,9 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: Generate Next.js types
+        run: bunx next typegen
+
       - name: Typecheck
         run: bun run typecheck
 
